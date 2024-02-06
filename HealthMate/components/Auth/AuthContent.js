@@ -61,7 +61,7 @@ const AuthContent = ({ isLogin, onAuthenticate }) => {
       />
       <View style={styles.buttons}>
         <FlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? "Create a new user" : "Log in instead"}
+          {isLogin ? "Sign up here to create an account" : "Log in instead"}
         </FlatButton>
       </View>
     </View>
@@ -77,7 +77,9 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     backgroundColor: Colors.primary800,
+    borderWidth: 2,
     elevation: 2,
+    borderColor: Colors.primary500,
     shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.35,
