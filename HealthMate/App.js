@@ -9,6 +9,7 @@ import { Colors } from "./constants/styles";
 
 const Stack = createNativeStackNavigator();
 
+// render this without token
 const AuthStack = () => {
   return (
     <Stack.Navigator
@@ -18,20 +19,20 @@ const AuthStack = () => {
         contentStyle: { backgroundColor: Colors.primary800 },
       }}
     >
-      {/* <Stack.Screen name="Welcome" component={WelcomeScreen} /> */}
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
     </Stack.Navigator>
   );
 };
 
+// render this with token
 const AuthenticatedStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: Colors.primary500 },
-        headerTintColor: "white",
-        contentStyle: { backgroundColor: Colors.primary100 },
+        headerStyle: { backgroundColor: Colors.primary800 },
+        headerTintColor: Colors.primary500,
+        contentStyle: { backgroundColor: Colors.primary800 },
       }}
     >
       <Stack.Screen name="Welcome" component={WelcomeScreen} />

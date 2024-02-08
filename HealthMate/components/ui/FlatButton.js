@@ -23,11 +23,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.25,
   },
   buttonText: {
     textAlign: "center",
     color: "#C6B2FA",
     fontWeight: "500",
+    fontSize: 18,
   },
 });

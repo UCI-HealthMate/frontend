@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AppleHealthKit from "react-native-health";
+import { Colors } from "../constants/styles";
 
 const WelcomeScreen = () => {
   const [steps, setSteps] = useState(0);
@@ -8,7 +9,9 @@ const WelcomeScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Welcome!</Text>
-      <Text>You authenticated successfully!</Text>
+      <Text style={{ color: Colors.primary500 }}>
+        You authenticated successfully!
+      </Text>
     </View>
   );
 };
@@ -26,5 +29,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 8,
+    color: Colors.primary500,
   },
 });

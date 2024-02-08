@@ -1,6 +1,6 @@
 import AuthContent from "../components/Auth/AuthContent";
 import Title from "../components/ui/Title";
-import { Text, View, StyleSheet } from "react-native";
+import { View } from "react-native";
 
 const SignupScreen = () => {
   return (

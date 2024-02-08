@@ -4,10 +4,10 @@ const Title = () => {
   return (
     <View style={styles.textContainer}>
       <Image
-        source={require("../../assets/round.png")}
-        style={{ width: 200, height: 200 }}
+        source={require("../../assets/logo.png")}
+        style={{ width: 150, height: 150 }}
       />
-      <Text style={styles.text}>HealthMate</Text>
+      {/* <Text style={styles.text}>HealthMate</Text> */}
     </View>
   );
 };
@@ -16,7 +16,7 @@ export default Title;
 
 const styles = StyleSheet.create({
   textContainer: {
-    marginTop: 50,
+    marginTop: 140,
     padding: 10,
     alignSelf: "center",
   },

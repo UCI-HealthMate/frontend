@@ -19,10 +19,12 @@ export default Button;
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 6,
+    alignSelf: "center",
+    width: 150,
+    borderRadius: 30,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: Colors.primary800,
+    backgroundColor: Colors.primary500,
     elevation: 2,
     borderWidth: 2,
     borderColor: Colors.primary500,
@@ -32,11 +34,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.25,
   },
   buttonText: {
     textAlign: "center",
-    color: Colors.primary500,
+    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },

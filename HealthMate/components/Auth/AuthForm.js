@@ -83,7 +83,7 @@ const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }) => {
         )}
         <View style={styles.buttons}>
           <Button onPress={submitHandler}>
-            {isLogin ? "Log In" : "Sign Up"}
+            {isLogin ? "Login" : "Sign Up"}
           </Button>
         </View>
       </View>
@@ -96,5 +96,9 @@ export default AuthForm;
 const styles = StyleSheet.create({
   buttons: {
     marginTop: 12,
+  },
+  form: {
+    // justifyContent: "center",
+    // alignItems: "center",
   },
 });
