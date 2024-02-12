@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import AppleHealthKit from "react-native-health";
 import { Colors } from "../constants/styles";
 
-const WelcomeScreen = () => {
-  const [steps, setSteps] = useState(0);
-
+const DietScreen = () => {
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.title}>Main screen</Text>
+      <Text style={styles.title}>Diet screen</Text>
     </View>
   );
 };
 
-export default WelcomeScreen;
+export default DietScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {

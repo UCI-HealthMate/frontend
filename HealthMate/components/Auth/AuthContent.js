@@ -125,14 +125,14 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     color: "#C6B2FA",
-    fontWeight: "400",
+    fontWeight: "500",
     fontSize: 18,
     marginBottom: 5,
   },
   disableButtonText: {
     textAlign: "center",
     color: "gray",
-    fontWeight: "300",
+    fontWeight: "500",
     fontSize: 18,
   },
   underLine: {

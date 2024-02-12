@@ -1,22 +1,21 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 
-const Title = () => {
+const Logo = () => {
   return (
     <View style={styles.textContainer}>
       <Image
         source={require("../../assets/logo.png")}
         style={{ width: 150, height: 150 }}
       />
-      {/* <Text style={styles.text}>HealthMate</Text> */}
     </View>
   );
 };
 
-export default Title;
+export default Logo;
 
 const styles = StyleSheet.create({
   textContainer: {
-    marginTop: 140,
+    marginTop: 110,
     padding: 10,
     alignSelf: "center",
   },

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import AppleHealthKit from "react-native-health";
 import { Colors } from "../constants/styles";
 
-const WelcomeScreen = () => {
+const MainScreen = () => {
   const [steps, setSteps] = useState(0);
 
   return (
@@ -13,7 +13,7 @@ const WelcomeScreen = () => {
   );
 };
 
-export default WelcomeScreen;
+export default MainScreen;
 
 const styles = StyleSheet.create({
   rootContainer: {
