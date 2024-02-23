@@ -24,7 +24,7 @@ const Input = ({
         onChangeText={onUpdateValue}
         value={value}
         placeholder={label}
-        placeholderTextColor={!isInvalid ? "gray" : Colors.error500}
+        placeholderTextColor={!isInvalid ? "#F8CECC" : Colors.error500}
       />
     </View>
   );
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary800,
     borderRadius: 8,
 
-    borderColor: "white",
+    borderColor: "#F8CECC",
     borderWidth: 2,
 
     fontSize: 16,

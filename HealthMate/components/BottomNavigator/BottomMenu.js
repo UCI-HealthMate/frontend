@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign } from "@expo/vector-icons";
-import { Text, View } from "react-native";
+import { View, Image } from "react-native";
 import { Colors } from "../../constants/styles";
 import { useContext } from "react";
 
@@ -41,6 +40,7 @@ const BottomMenu = () => {
         name="Main"
         component={MainScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -49,13 +49,19 @@ const BottomMenu = () => {
                 top: 15,
               }}
             >
-              <AntDesign
+              {/* <AntDesign
                 name="heart"
                 size={24}
                 color={focused ? Colors.primary500 : "#748c94"}
                 style={{ width: 25, height: 25 }}
+              /> */}
+              <Image
+                color={focused ? Colors.primary500 : "#748c94"}
+                source={require("../../assets/hrt-logo.png")}
+                style={{ width: 35, height: 35 }}
+                tintColor={focused ? Colors.primary500 : "#748c94"}
               />
-              <Text
+              {/* <Text
                 style={{
                   color: focused ? Colors.primary500 : "#748c94",
                   fontWeight: 600,
@@ -63,7 +69,7 @@ const BottomMenu = () => {
                 }}
               >
                 Main
-              </Text>
+              </Text> */}
             </View>
           ),
           headerRight: ({ tintColor }) => (
@@ -80,6 +86,7 @@ const BottomMenu = () => {
         name="Log"
         component={LogScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -88,7 +95,13 @@ const BottomMenu = () => {
                 top: 15,
               }}
             >
-              <AntDesign
+              <Image
+                color={focused ? Colors.primary500 : "#748c94"}
+                source={require("../../assets/rec-logo.png")}
+                style={{ width: 35, height: 35 }}
+                tintColor={focused ? Colors.primary500 : "#748c94"}
+              />
+              {/* <AntDesign
                 name="plus"
                 size={24}
                 color={focused ? Colors.primary500 : "#748c94"}
@@ -102,7 +115,7 @@ const BottomMenu = () => {
                 }}
               >
                 Log
-              </Text>
+              </Text> */}
             </View>
           ),
           headerRight: ({ tintColor }) => (
@@ -119,6 +132,7 @@ const BottomMenu = () => {
         name="Account"
         component={AccountScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View
               style={{
@@ -127,7 +141,13 @@ const BottomMenu = () => {
                 top: 15,
               }}
             >
-              <AntDesign
+              <Image
+                color={focused ? Colors.primary500 : "#748c94"}
+                source={require("../../assets/pfp-logo.png")}
+                style={{ width: 45, height: 35 }}
+                tintColor={focused ? Colors.primary500 : "#748c94"}
+              />
+              {/* <AntDesign
                 name="user"
                 size={24}
                 color={focused ? Colors.primary500 : "#748c94"}
@@ -141,7 +161,7 @@ const BottomMenu = () => {
                 }}
               >
                 Account
-              </Text>
+              </Text> */}
             </View>
           ),
           headerRight: ({ tintColor }) => (

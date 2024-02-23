@@ -1,6 +1,6 @@
 import AuthContent from "../components/Auth/AuthContent";
 import Logo from "../components/ui/Logo";
-import { Alert, View } from "react-native";
+import { Alert, View, Image } from "react-native";
 import { useContext, useState } from "react";
 
 import { login } from "../util/auth";
@@ -30,9 +30,36 @@ const LoginScreen = () => {
   }
 
   return (
-    <View>
-      <Logo />
-      <AuthContent isLogin onAuthenticate={loginHandler} />
+    <View style={{ flex: 1, justifyContent: "space-between" }}>
+      <View>
+        <View
+          style={{
+            alignSelf: "flex-end",
+          }}
+        >
+          <Image
+            source={require("../assets/squiggly-top.png")}
+            style={{
+              marginTop: 0,
+              width: 180,
+              height: 220,
+            }}
+          />
+        </View>
+        <Logo />
+        <AuthContent isLogin onAuthenticate={loginHandler} />
+      </View>
+      <View style={{ alignSelf: "stretch" }}>
+        <Image
+          source={require("../assets/squiggly-bottom.png")}
+          style={{
+            width: 360,
+            height: 300,
+            alignSelf: "center",
+            marginLeft: -100,
+          }}
+        />
+      </View>
     </View>
   );
 };
