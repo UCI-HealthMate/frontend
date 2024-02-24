@@ -1,17 +1,58 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../constants/styles";
 import Button from "../components/ui/Button";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { AuthContext } from "../store/auth-context";
 import BubbleWithCharacter from "../components/ui/BubbleWithCharacter";
 import Value from "../components/AccountInformation/Value";
+import AppleHealthKit, { HealthKitPermissions, HealthInputOptions } from 'react-native-health';
 
+const permissions = {
+  permissions: {
+    read: [AppleHealthKit.Constants.Permissions.StepCount, AppleHealthKit.Constants.Permissions.ActiveEnergyBurned],
+    write: [],
+  }
+};
 
+const STEPS_GOAL = 10000; // will have to call to be user-specific
 
 const AccountScreen = () => {
-  
+  const [hasPermissions, setHasPermissions] = useState(false);
+  const [steps, setSteps] = useState(0);
+
+  useEffect(() => {
+    AppleHealthKit.initHealthKit(permissions, (err) => {
+      if (err) {
+        console.log("error initializing Healthkit: ");
+        return;
+      } 
+      setHasPermissions(true);
+    })
+    ;
+  }, []);
+
   authCtx = useContext(AuthContext);
+  useEffect(() => {
+    if (!hasPermissions) {
+      return;
+    }
+
+    const options = {
+      date: new Date().toISOString(),
+      includeManuallyAdded: false,
+    };
+
+    AppleHealthKit.getStepCount(options, (err, results) => {
+      if (err) {
+        console.log("error getting step count: ", err);
+        return;
+      }
+      // console.log("step count: ", results.value);
+      setSteps(results.value);
+    });
+  }, [hasPermissions]);
+
   return (
     <View style={styles.rootContainer}>
       <BubbleWithCharacter>
@@ -31,7 +72,7 @@ const AccountScreen = () => {
           <Value label="Body mass index" value="25" />
           <Value label="Active Energy" value="102.5 cal" />
           <Value label="Resting Energy" value="52.6 cal" />
-          <Value label="Step count (week avg)" value="2,345 steps" />
+          <Value label="Step count (today)" value={steps.toString()} />
           <Value label="Time in bed (week avg)" value="7h 32m" />
       </View>
       <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 90 }}>
