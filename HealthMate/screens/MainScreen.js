@@ -1,13 +1,19 @@
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
-import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AppleHealthKit from "react-native-health";
 
 import { Colors } from "../constants/styles";
 import BubbleWithCharacter from "../components/ui/BubbleWithCharacter";
 import { useEffect, useState } from "react";
+import RingChart from "../components/ui/RingChart";
+
+const deviceWidth = Dimensions.get("window").width;
 
 const MainScreen = () => {
   const [currentDate, setCurrentDate] = useState("");
+
+  const [heartRateSamples, setHeartRateSamples] = useState([]);
+  const [activity, setActivity] = useState([]);
 
   const navigation = useNavigation();
 
@@ -25,6 +31,47 @@ const MainScreen = () => {
   useEffect(() => {
     const date = new Date();
     setCurrentDate(formatDate(date));
+
+    // apple healthkit
+    const permissions = {
+      permissions: {
+        read: [
+          AppleHealthKit.Constants.Permissions.ActiveEnergyBurned,
+          AppleHealthKit.Constants.Permissions.StepCount,
+          AppleHealthKit.Constants.Permissions.AppleExerciseTime,
+        ],
+        // write: [AppleHealthKit.Constants.Permissions.Steps],
+      },
+    };
+
+    AppleHealthKit.initHealthKit(permissions, (error) => {
+      if (error) {
+        console.log("[ERROR] Cannot grant permissions!", error);
+        return;
+      }
+
+      const options = {
+        startDate: new Date(2024, 2, 1).toISOString(),
+        endDate: new Date().toISOString(),
+      };
+
+      AppleHealthKit.getActiveEnergyBurned(options, (err, results) => {
+        if (err) {
+          return;
+        }
+        console.log(options.startDate, options.endDate);
+        setActivity(results);
+        console.log(results);
+      });
+      AppleHealthKit.getDailyStepCountSamples(options, (err, results) => {
+        if (err) {
+          return;
+        }
+        console.log(options.startDate, options.endDate);
+        setActivity(results);
+        // console.log(results);
+      });
+    });
   }, []);
 
   function formatDate(date) {
@@ -58,106 +105,99 @@ const MainScreen = () => {
       <View style={styles.statsContainer}>
         <View>
           <Pressable onPress={switchToDiet}>
-            <AnimatedCircularProgress
-              size={190}
-              width={5}
-              backgroundWidth={10}
-              fill={70}
-              tintColor={Colors.primary500}
-              backgroundColor="gray"
-              rotation={360}
-              padding={5}
-              lineCap="round"
-              style={{}}
+            <RingChart
+              rSize={deviceWidth < 400 ? 165 : 190}
+              rWidth={5}
+              rBGWidth={10}
+              rTColor={Colors.primary500}
+              rFill={70}
             >
-              {(fill) => (
-                <>
-                  <Text
-                    style={{ fontSize: 25, fontWeight: "500", color: "pink" }}
-                  >
-                    Diet
-                  </Text>
-                  <Text
-                    style={{ fontSize: 15, fontWeight: "400", color: "white" }}
-                  >
-                    200 Cal Intake
-                  </Text>
-                </>
-              )}
-            </AnimatedCircularProgress>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 21 : 25,
+                  fontWeight: "500",
+                  color: "pink",
+                }}
+              >
+                Diet
+              </Text>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 13 : 15,
+                  fontWeight: "400",
+                  color: "white",
+                }}
+              >
+                200 Cal Intake
+              </Text>
+            </RingChart>
           </Pressable>
         </View>
         <View style={styles.subStatsContainer}>
           <Pressable onPress={switchToExercise}>
-            <AnimatedCircularProgress
-              size={190}
-              width={5}
-              backgroundWidth={10}
-              fill={40}
-              tintColor="#B2FAB1"
-              backgroundColor="gray"
-              rotation={360}
-              padding={5}
-              lineCap="round"
-              style={{}}
+            <RingChart
+              rSize={deviceWidth < 400 ? 165 : 190}
+              rWidth={5}
+              rBGWidth={10}
+              rTColor={"#B2FAB1"}
+              rFill={40}
             >
-              {(fill) => (
-                <>
-                  <Text
-                    style={{
-                      fontSize: 25,
-                      fontWeight: "500",
-                      color: "#B2FAB1",
-                    }}
-                  >
-                    Exercise
-                  </Text>
-                  <Text
-                    style={{ fontSize: 15, fontWeight: "400", color: "white" }}
-                  >
-                    45 mins done
-                  </Text>
-                  <Text
-                    style={{ fontSize: 15, fontWeight: "400", color: "white" }}
-                  >
-                    350 cal burned
-                  </Text>
-                </>
-              )}
-            </AnimatedCircularProgress>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 21 : 25,
+                  fontWeight: "500",
+                  color: "#B2FAB1",
+                }}
+              >
+                Exercise
+              </Text>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 13 : 15,
+                  fontWeight: "400",
+                  color: "white",
+                }}
+              >
+                45 mins done
+              </Text>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 13 : 15,
+                  fontWeight: "400",
+                  color: "white",
+                }}
+              >
+                350 cal burned
+              </Text>
+            </RingChart>
           </Pressable>
           <Pressable onPress={switchToSleep}>
-            <AnimatedCircularProgress
-              size={190}
-              width={5}
-              backgroundWidth={10}
-              fill={100}
-              tintColor="#B1DBFA"
-              backgroundColor="gray"
-              rotation={360}
-              padding={5}
-              lineCap="round"
-              style={{}}
+            <RingChart
+              rSize={deviceWidth < 400 ? 165 : 190}
+              rWidth={5}
+              rBGWidth={10}
+              rTColor={"#B1DBFA"}
+              rFill={100}
             >
-              {(fill) => (
-                <>
-                  <Text
-                    style={{
-                      fontSize: 25,
-                      fontWeight: "500",
-                      color: "#B1DBFA",
-                    }}
-                  >
-                    Sleep
-                  </Text>
-                  <Text
-                    style={{ fontSize: 15, fontWeight: "400", color: "white" }}
-                  >
-                    7.5 hours done
-                  </Text>
-                </>
-              )}
-            </AnimatedCircularProgress>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 21 : 25,
+                  fontWeight: "500",
+                  color: "#B1DBFA",
+                }}
+              >
+                Sleep
+              </Text>
+              <Text
+                style={{
+                  fontSize: deviceWidth < 400 ? 13 : 15,
+                  fontWeight: "400",
+                  color: "white",
+                }}
+              >
+                7.5 hours done
+              </Text>
+            </RingChart>
           </Pressable>
         </View>
       </View>

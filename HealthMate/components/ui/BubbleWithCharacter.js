@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import { Colors } from "../../constants/styles";
 
 const BubbleWithCharacter = ({ children }) => {
@@ -18,6 +18,9 @@ const BubbleWithCharacter = ({ children }) => {
 
 export default BubbleWithCharacter;
 
+const deviceWidth = Dimensions.get("window").width;
+// console.log(deviceWidth);
+
 const styles = StyleSheet.create({
   welcomeText: {
     color: "black",
@@ -26,7 +29,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   speechBubble: {
-    width: 282,
+    width: deviceWidth < 400 ? 245 : 282,
     height: 113,
     backgroundColor: Colors.primary500,
     borderRadius: 15,
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
     borderRightColor: "transparent",
     borderBottomColor: Colors.primary500,
     transform: [{ rotate: "33deg" }],
-    marginLeft: 253,
+    marginLeft: deviceWidth < 400 ? 216 : 253,
     marginTop: -20,
   },
   characterImage: {
