@@ -2,133 +2,17 @@ import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../constants/styles";
 import Button from "../components/ui/Button";
 import { useContext, useEffect, useState } from "react";
-
 import { AuthContext } from "../store/auth-context";
 import BubbleWithCharacter from "../components/ui/BubbleWithCharacter";
 import Value from "../components/AccountInformation/Value";
-import AppleHealthKit from 'react-native-health';
-import App from "../App";
+import useHealthData from "../hooks/useHealthData";
 
 const STEPS_GOAL = 10000; // will have to call to be user-specific
 
 const AccountScreen = () => {
-  const [hasPermissions, setHasPermissions] = useState(false);
-  const [biosex, setBiosex] = useState(0);
-  const [birthday, setBirthday] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [bodyFatPerc, setBodyFatPerc] = useState(0);
-  const [bmi, setBmi] = useState(0);
-  const [steps, setSteps] = useState(0);
-  const [numFlights, setNumFlights] = useState(0);
-  const feet = Math.floor(height / 12);
-  const inches = height % 12;
   
-  function formatBday(dateString) {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0'); 
-    const day = String(date.getDate()).padStart(2, '0');
-    const year = date.getFullYear();
-   
-    return `${month}/${day}/${year}`;
-   }
-
-  useEffect(() => {
-    const permissions = {
-      permissions: {
-        read: [
-          AppleHealthKit.Constants.Permissions.BiologicalSex,
-          AppleHealthKit.Constants.Permissions.DateOfBirth,
-          AppleHealthKit.Constants.Permissions.Height,
-          AppleHealthKit.Constants.Permissions.Weight,
-          AppleHealthKit.Constants.Permissions.BodyFatPercentage,
-          AppleHealthKit.Constants.Permissions.BodyMassIndex,
-          AppleHealthKit.Constants.Permissions.StepCount, 
-          AppleHealthKit.Constants.Permissions.FlightsClimbed,
-        ],
-        write: [],
-      }
-    };
-
-    AppleHealthKit.initHealthKit(permissions, (err) => {
-      if (err) {
-        // console.log("error initializing Healthkit: ", err);
-        return;
-      } 
-      setHasPermissions(true);
-    });
-  }, []);
-
   authCtx = useContext(AuthContext);
-  
-  useEffect(() => {
-    if (!hasPermissions) {
-      return;
-    }
-
-    let options = {
-      date: new Date(2024, 2, 7).toISOString(),
-      includeManuallyAdded: false,
-    };
-
-    AppleHealthKit.getBiologicalSex(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setBiosex(results.value);
-    });
-    AppleHealthKit.getDateOfBirth(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setBirthday(results.value);
-    });
-    AppleHealthKit.getLatestHeight(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setHeight(results.value);
-    });
-    AppleHealthKit.getLatestWeight(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setWeight(results.value);
-    });
-    AppleHealthKit.getLatestBodyFatPercentage(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setBodyFatPerc(results.value);
-    });
-    AppleHealthKit.getLatestBmi(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setBmi(results.value);
-    });
-    AppleHealthKit.getStepCount(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setSteps(results.value);
-
-    });
-    AppleHealthKit.getFlightsClimbed(options, (err, results) => {
-      if (err) {
-          return;
-      }
-      // console.log(results)
-      setNumFlights(results.value);
-    });
-  }, [hasPermissions]);
+  const { biosex, birthday, feet, inches, weight, bodyFatPerc, bmi, steps, numFlights } = useHealthData(new Date(2024, 2, 7)); // date is 03/07/24
 
   return (
     <View style={styles.rootContainer}>
@@ -138,7 +22,7 @@ const AccountScreen = () => {
             Peter Anteater
           </Text>
           <Text style={{ fontSize: 20, margin: 0, alignSelf: "center" }}>
-          {biosex === 'Male' ? 'Male' : 'Female'} | {formatBday(birthday)}
+          {biosex} | {birthday}
           </Text>
         </View>
       </BubbleWithCharacter>
