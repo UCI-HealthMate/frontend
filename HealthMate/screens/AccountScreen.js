@@ -1,13 +1,28 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "../constants/styles";
 import Button from "../components/ui/Button";
-import { useContext } from "react";
-
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
 import BubbleWithCharacter from "../components/ui/BubbleWithCharacter";
+import Value from "../components/AccountInformation/Value";
+import useHealthData from "../hooks/useHealthData";
+
+const STEPS_GOAL = 10000; // will have to call to be user-specific
 
 const AccountScreen = () => {
   authCtx = useContext(AuthContext);
+  const {
+    biosex,
+    birthday,
+    feet,
+    inches,
+    weight,
+    bodyFatPerc,
+    bmi,
+    steps,
+    numFlights,
+  } = useHealthData(new Date(2024, 2, 7)); // date is 03/07/24
+
   return (
     <View style={styles.rootContainer}>
       <BubbleWithCharacter>
@@ -16,10 +31,18 @@ const AccountScreen = () => {
             Peter Anteater
           </Text>
           <Text style={{ fontSize: 20, margin: 0, alignSelf: "center" }}>
-            Male | 01/01/2001
+            {biosex} | {birthday}
           </Text>
         </View>
       </BubbleWithCharacter>
+      <View style={styles.infoContainer}>
+        <Value label="Height" value={`${feet}' ${inches}"`} />
+        <Value label="Weight" value={`${weight.toFixed(1)} lbs`} />
+        <Value label="Body Fat %" value={bodyFatPerc} />
+        <Value label="Body Mass Index" value={bmi} />
+        <Value label="Step Count (today)" value={steps.toString()} />
+        <Value label="Flights Climbed" value={numFlights.toString()} />
+      </View>
       <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 90 }}>
         <View
           style={{
@@ -54,5 +77,8 @@ const styles = StyleSheet.create({
 
   button: {
     marginHorizontal: 0,
+  },
+  infoContainer: {
+    flexDirection: "column",
   },
 });
