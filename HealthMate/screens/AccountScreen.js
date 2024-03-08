@@ -7,8 +7,6 @@ import BubbleWithCharacter from "../components/ui/BubbleWithCharacter";
 import Value from "../components/AccountInformation/Value";
 import useHealthData from "../hooks/useHealthData";
 
-const STEPS_GOAL = 10000; // will have to call to be user-specific
-
 const AccountScreen = () => {
   authCtx = useContext(AuthContext);
   const {
@@ -28,7 +26,7 @@ const AccountScreen = () => {
       <BubbleWithCharacter>
         <View>
           <Text style={{ fontSize: 20, margin: 5, alignSelf: "center" }}>
-            Peter Anteater
+            {authCtx.uid}
           </Text>
           <Text style={{ fontSize: 20, margin: 0, alignSelf: "center" }}>
             {biosex} | {birthday}
