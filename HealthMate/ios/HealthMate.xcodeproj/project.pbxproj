@@ -275,6 +275,10 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCTI18nStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevLauncher.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXDevMenu.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -344,7 +348,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HealthMate.HealthMate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HealthMate.cao;
 				PRODUCT_NAME = HealthMate;
 				SWIFT_OBJC_BRIDGING_HEADER = "HealthMate/HealthMate-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -376,7 +380,7 @@
 					"-lc++",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.HealthMate.HealthMate;
+				PRODUCT_BUNDLE_IDENTIFIER = com.HealthMate.cao;
 				PRODUCT_NAME = HealthMate;
 				SWIFT_OBJC_BRIDGING_HEADER = "HealthMate/HealthMate-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
