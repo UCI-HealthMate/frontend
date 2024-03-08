@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 
 const deviceWidth = Dimensions.get("window").width;
 
-const ExerciseScreen = () => {
+const ExerciseScreen = ({ route }) => {
+  // console.log(route.params);
   const [time, setTime] = useState(0);
   const [calBurn, setCalBurn] = useState(0);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
@@ -21,24 +22,46 @@ const ExerciseScreen = () => {
   const rWeekText1 = "Goal: 60 mins";
   const rMonthText1 = "Goal: 60 mins";
 
-  const rDayText2 = "50 cal left until\nYou reach your goal today";
+  const rDayText2 =
+    calBurn >= 600
+      ? "You have reach your goal today!"
+      : `${(600 - calBurn).toFixed(
+          1
+        )} cal left until\nYou reach your goal today`;
+
   const rWeekText2 = "Goal: 600 cals";
   const rMonthText2 = "Goal: 600 cals";
 
   useEffect(() => {
-    setTime(5);
-    setCalBurn(1000);
-    setBarData([
-      { value: 250, label: "9a" },
-      { value: 500, label: "12p" },
-      { value: 745, label: "3p" },
-      { value: 320, label: "6p" },
-      { value: 600, label: "9p" },
-      { value: 256, label: "12a" },
-      { value: 300, label: "3a" },
-      { value: 300, label: "6a" },
-    ]);
-  }, []);
+    setTime(45);
+    if (selectedPeriod === "Day") {
+      setBarData(route.params["today"]);
+      let activeburned = 0;
+      route.params["today"].map((m) => {
+        activeburned = activeburned + m.value;
+      });
+
+      setCalBurn(activeburned);
+    } else if (selectedPeriod === "Week") {
+      setBarData(route.params["thisWeek"]);
+      let activeburned = 0;
+      let count = 0;
+      route.params["thisWeek"].map((m) => {
+        count += 1;
+        activeburned = activeburned + m.value;
+      });
+      setCalBurn(activeburned / count);
+    } else if (selectedPeriod === "Month") {
+      setBarData(route.params["thisMonth"]);
+      let activeburned = 0;
+      let count = 0;
+      route.params["thisMonth"].map((m) => {
+        count += 1;
+        activeburned = activeburned + m.value;
+      });
+      setCalBurn(activeburned / count);
+    }
+  }, [selectedPeriod]);
 
   return (
     <View style={styles.rootContainer}>
@@ -64,12 +87,16 @@ const ExerciseScreen = () => {
             >
               <Text
                 style={{
-                  fontSize: deviceWidth < 400 ? 12 : 14,
+                  fontSize: deviceWidth < 400 ? 16 : 18,
                   fontWeight: "500",
                   color: "#B2FAB1",
+                  textAlign: "center",
                 }}
               >
-                {time} mins done
+                {time}
+                {selectedPeriod === "Day" && " mins\nDone"}
+                {selectedPeriod === "Week" && " mins\nAvg"}
+                {selectedPeriod === "Month" && " mins\nAvg"}
               </Text>
             </RingChart>
             {
@@ -86,16 +113,20 @@ const ExerciseScreen = () => {
               rWidth={3}
               rBGWidth={6}
               rTColor={"#B2FAB1"}
-              rFill={60}
+              rFill={calBurn ? (calBurn / 600) * 100 : 0}
             >
               <Text
                 style={{
-                  fontSize: deviceWidth < 400 ? 12 : 14,
+                  fontSize: deviceWidth < 400 ? 16 : 18,
                   fontWeight: "500",
                   color: "#B2FAB1",
+                  textAlign: "center",
                 }}
               >
-                {calBurn} cal burned
+                {calBurn ? calBurn.toFixed(1) : 0}
+                {selectedPeriod === "Day" && " cal\nBurned"}
+                {selectedPeriod === "Week" && " cal\nAvg"}
+                {selectedPeriod === "Month" && " cal\nAvg"}
               </Text>
             </RingChart>
             <Text style={styles.ringText}>
@@ -107,7 +138,12 @@ const ExerciseScreen = () => {
         </View>
       </View>
       <View style={styles.graphPlaceholder}>
-        <BarChart barData={barData} bColor="#B2FAB1" />
+        <BarChart
+          barData={barData}
+          bColor="#B2FAB1"
+          period={selectedPeriod}
+          category="exercise"
+        />
       </View>
     </View>
   );

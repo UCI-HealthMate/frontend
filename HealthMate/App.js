@@ -94,6 +94,10 @@ const Root = () => {
       if (storedToken) {
         authCtx.authenticate(storedToken);
       }
+      const storedId = await AsyncStorage.getItem("id");
+      if (storedId) {
+        authCtx.setUserId(storedId);
+      }
       await SplashScreen.hideAsync();
     };
     fetchToken();
