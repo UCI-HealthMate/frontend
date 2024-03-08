@@ -47,6 +47,7 @@ const MainScreen = () => {
           AppleHealthKit.Constants.Permissions.StepCount,
           AppleHealthKit.Constants.Permissions.AppleExerciseTime,
           AppleHealthKit.Constants.Permissions.SleepAnalysis,
+          AppleHealthKit.Constants.Permissions.ActivitySummary,
         ],
         // write: [AppleHealthKit.Constants.Permissions.Steps],
       },
@@ -211,6 +212,20 @@ const MainScreen = () => {
             }
             saveActiveEnergyBurned(periodKey, results);
             // console.log(periodKey, results);
+          }
+        );
+        AppleHealthKit.getActivitySummary(
+          {
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+            ascending: true,
+          },
+          (err, results) => {
+            if (err) {
+              return console.error("Error fetching ActiveEnergyBurned", err);
+            }
+            // saveActiveEnergyBurned(periodKey, results);
+            console.log(periodKey, results);
           }
         );
       };
