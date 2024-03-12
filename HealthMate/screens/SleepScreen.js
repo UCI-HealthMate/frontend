@@ -28,36 +28,44 @@ const SleepScreen = ({ route }) => {
 
   useEffect(() => {
     if (selectedPeriod === "Day") {
-      const todayData = route.params["today"] || [];
+      const todayData = route.params["today"][0] == undefined ?[{label:0,value:0}]:route.params["today"];
       setBarData(todayData);
       if (todayData.length > 0) {
         let hour = 0;
         todayData.map((m) => {
-          hour = hour + m.value;
+          if (m && typeof m === 'object' && 'value' in m) {
+            hour = hour + m.value;
+          }
         });
         setSleepHours(hour);
       }
     } else if (selectedPeriod === "Week") {
-      const thisWeekData = route.params["thisWeek"] || [];
+      // const thisWeekData = route.params["thisWeek"] || [{label:0,value:0}];
+      const thisWeekData = route.params["thisWeek"][0] == undefined ?[{label:0,value:0}]:route.params["thisWeek"];
       setBarData(thisWeekData);
       if (thisWeekData.length > 0) {
         let hour = 0;
         let count = 0;
         thisWeekData.map((m) => {
           count += 1;
+          if (m && typeof m === 'object' && 'value' in m) {
           hour = hour + m.value;
+          }
         });
         setSleepHours(hour / count);
       }
     } else if (selectedPeriod === "Month") {
-      const thisMonthData = route.params["thisMonth"] || [];
+      // const thisMonthData = route.params["thisMonth"] || [{label:0,value:0}];
+      const thisMonthData = route.params["thisMonth"][0] == undefined ?[{label:0,value:0}]:route.params["thisMonth"];
       setBarData(thisMonthData);
       if (thisMonthData.length > 0) {
         let hour = 0;
         let count = 0;
         thisMonthData.map((m) => {
           count += 1;
+          if (m && typeof m === 'object' && 'value' in m) {
           hour = hour + m.value;
+          }
         });
         setSleepHours(hour / count);
       }

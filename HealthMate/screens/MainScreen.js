@@ -56,7 +56,7 @@ const MainScreen = () => {
     const saveSleepData = async (key, data) => {
       try {
         const sleepData = data.map((m) => {
-          if (m.value === "ASLEEP") {
+          if (m.value === "INBED") {
             // console.log(key, m.startDate, m.endDate);
             const startTime = m.startDate;
             const endTime = m.endDate;
@@ -97,9 +97,12 @@ const MainScreen = () => {
             return startDateString === todayDateString;
           });
           const formattedData = todayData.map((item) => {
-            const hour = new Date(item.startDate).getHours(); // startDate의 시간 부분
-            return { label: `${hour}`, value: item.value };
-          });
+            if (item && typeof item === 'object' && 'value' in item) {
+               const hour = new Date(item.startDate).getHours(); // startDate의 시간 부분
+               return { label: `${hour}`, value: item.value };
+            }
+            return null; // or handle the case where item is not an object or doesn't have a value property
+           });
           // console.log(formattedData);
           setActiveBurned((prevActiveBurned) => ({
             ...prevActiveBurned,
