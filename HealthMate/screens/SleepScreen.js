@@ -8,7 +8,7 @@ import PeriodMenu from "../components/ui/PeriodMenu";
 const deviceWidth = Dimensions.get("window").width;
 
 const SleepScreen = ({ route }) => {
-  // console.log(route.params);
+  console.log(route.params);
   const [sleepHours, setSleepHours] = useState(0);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
   const [barData, setBarData] = useState([]);
@@ -28,30 +28,39 @@ const SleepScreen = ({ route }) => {
 
   useEffect(() => {
     if (selectedPeriod === "Day") {
-      setBarData(route.params["today"]);
-      let hour = 0;
-      route.params["today"].map((m) => {
-        hour = hour + m.value;
-      });
-      setSleepHours(hour);
+      const todayData = route.params["today"] || [];
+      setBarData(todayData);
+      if (todayData.length > 0) {
+        let hour = 0;
+        todayData.map((m) => {
+          hour = hour + m.value;
+        });
+        setSleepHours(hour);
+      }
     } else if (selectedPeriod === "Week") {
-      setBarData(route.params["thisWeek"]);
-      let hour = 0;
-      let count = 0;
-      route.params["thisWeek"].map((m) => {
-        count += 1;
-        hour = hour + m.value;
-      });
-      setSleepHours(hour / count);
+      const thisWeekData = route.params["thisWeek"] || [];
+      setBarData(thisWeekData);
+      if (thisWeekData.length > 0) {
+        let hour = 0;
+        let count = 0;
+        thisWeekData.map((m) => {
+          count += 1;
+          hour = hour + m.value;
+        });
+        setSleepHours(hour / count);
+      }
     } else if (selectedPeriod === "Month") {
-      setBarData(route.params["thisMonth"]);
-      let hour = 0;
-      let count = 0;
-      route.params["thisMonth"].map((m) => {
-        count += 1;
-        hour = hour + m.value;
-      });
-      setSleepHours(hour / count);
+      const thisMonthData = route.params["thisMonth"] || [];
+      setBarData(thisMonthData);
+      if (thisMonthData.length > 0) {
+        let hour = 0;
+        let count = 0;
+        thisMonthData.map((m) => {
+          count += 1;
+          hour = hour + m.value;
+        });
+        setSleepHours(hour / count);
+      }
     }
   }, [selectedPeriod]);
 
