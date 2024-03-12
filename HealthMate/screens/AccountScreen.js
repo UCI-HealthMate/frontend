@@ -34,12 +34,24 @@ const AccountScreen = () => {
         </View>
       </BubbleWithCharacter>
       <View style={styles.infoContainer}>
-        <Value label="Height" value={`${feet}' ${inches}"`} />
-        <Value label="Weight" value={`${weight.toFixed(1)} lbs`} />
-        <Value label="Body Fat %" value={bodyFatPerc} />
-        <Value label="Body Mass Index" value={bmi} />
-        <Value label="Step Count (today)" value={steps.toString()} />
-        <Value label="Flights Climbed" value={numFlights.toString()} />
+        <Value
+          label="Height"
+          value={feet ? `${feet.toFixed(0)}' ${inches.toFixed(0)}"` : "..."}
+        />
+        <Value
+          label="Weight"
+          value={weight ? `${weight.toFixed(1)} lbs` : "..."}
+        />
+        <Value label="Body Fat %" value={bodyFatPerc ? bodyFatPerc : "..."} />
+        <Value label="Body Mass Index" value={bmi ? bmi : "..."} />
+        <Value
+          label="Step Count (today)"
+          value={steps ? steps.toString() : "..."}
+        />
+        <Value
+          label="Flights Climbed"
+          value={numFlights ? numFlights.toString() : "..."}
+        />
       </View>
       <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 90 }}>
         <View
@@ -69,7 +81,7 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     padding: 20,
-    paddingTop: 60, // 상태 바 높이 고려
+    paddingTop: 60,
     padding: 20,
   },
 

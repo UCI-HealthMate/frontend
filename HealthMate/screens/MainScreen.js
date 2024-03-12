@@ -195,7 +195,7 @@ const MainScreen = () => {
           },
           (err, results) => {
             if (err) {
-              return console.error("Error fetching ActiveEnergyBurned", err);
+              return console.error("Error fetching SleepSamples", err);
             }
             saveSleepData(periodKey, results);
           }
@@ -222,7 +222,7 @@ const MainScreen = () => {
           },
           (err, results) => {
             if (err) {
-              return console.error("Error fetching ActiveEnergyBurned", err);
+              return console.error("Error fetching ActivitySummary", err);
             }
             // saveActiveEnergyBurned(periodKey, results);
             console.log(periodKey, results);

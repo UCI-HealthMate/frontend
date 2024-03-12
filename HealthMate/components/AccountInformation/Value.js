@@ -13,12 +13,17 @@ export default Value;
 
 const styles = StyleSheet.create({
   label: {
-    fontSize: 14,
+    fontSize: 20,
     color: "white",
+    fontWeight: "500",
+    marginVertical: 3,
   },
   value: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "400",
     color: Colors.primary500,
+  },
+  infoContainer: {
+    marginBottom: 7,
   },
 });
