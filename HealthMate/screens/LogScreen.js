@@ -13,6 +13,8 @@ import { useContext, useEffect, useState } from "react";
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [allergiesChecks, setAllergiesChecks] = useState({});
+  const [prefChecks, setPrefChecks] = useState({});
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -38,6 +40,14 @@ const LogScreen = () => {
     "vegan",
     "vegetarian",
   ];
+
+  const toggleAllergyCheck = (item) => {
+    setAllergiesChecks((prev) => ({ ...prev, [item]: !prev[item] }));
+  };
+
+  const togglePrefCheck = (item) => {
+    setPrefChecks((prev) => ({ ...prev, [item]: !prev[item] }));
+  };
 
   return (
     <View style={styles.rootContainer}>
@@ -77,10 +87,8 @@ const LogScreen = () => {
                       >
                         <CheckBox
                           disabled={false}
-                          value={toggleCheckBox}
-                          onValueChange={(newValue) =>
-                            setToggleCheckBox(newValue)
-                          }
+                          value={allergiesChecks[allergy] || false}
+                          onValueChange={() => toggleAllergyCheck(allergy)}
                           onAnimationType="fill"
                           onCheckColor="#28282B"
                           onFillColor="#FFC9CB"
@@ -104,10 +112,8 @@ const LogScreen = () => {
                       >
                         <CheckBox
                           disabled={false}
-                          value={toggleCheckBox}
-                          onValueChange={(newValue) =>
-                            setToggleCheckBox(newValue)
-                          }
+                          value={prefChecks[pref] || false}
+                          onValueChange={() => togglePrefCheck(pref)}
                           onAnimationType="fill"
                           onCheckColor="#28282B"
                           onFillColor="#FFC9CB"
