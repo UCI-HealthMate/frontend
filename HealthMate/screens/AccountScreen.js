@@ -9,6 +9,14 @@ import useHealthData from "../hooks/useHealthData";
 
 const AccountScreen = () => {
   authCtx = useContext(AuthContext);
+  const today2 = new Date();
+  const startOfDay = new Date(
+    today2.getFullYear(),
+    today2.getMonth(),
+    today2.getDate()
+  );
+  startOfDay.setHours(-7, 0, 0, 0);
+
   const {
     biosex,
     birthday,
@@ -19,7 +27,7 @@ const AccountScreen = () => {
     bmi,
     steps,
     numFlights,
-  } = useHealthData(new Date(2024, 2, 7)); // date is 03/07/24
+  } = useHealthData(startOfDay); // date is 03/07/24
 
   return (
     <View style={styles.rootContainer}>

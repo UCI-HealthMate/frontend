@@ -108,14 +108,14 @@ const useHealthData = (date) => {
       if (err) {
         return;
       }
-      console.log(results);
+      // console.log(results);
       setSteps(results.value);
     });
     AppleHealthKit.getFlightsClimbed(options, (err, results) => {
       if (err) {
         return;
       }
-      // console.log(results)
+      // console.log(results);
       setNumFlights(results.value);
     });
   }, [hasPermissions]);
