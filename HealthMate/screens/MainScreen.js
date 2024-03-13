@@ -55,6 +55,7 @@ const MainScreen = () => {
 
     const saveSleepData = async (key, data) => {
       try {
+        // console.log("Data: ", data);
         const sleepData = data.map((m) => {
           if (m.value === "INBED") {
             // console.log(key, m.startDate, m.endDate);
@@ -70,14 +71,28 @@ const MainScreen = () => {
               label: dayOfStart,
               value: Math.floor(minutesSlept) / 60,
               min: Math.floor(minutesSlept),
-              startHour: start.getHours(),
-              startMin: start.getMinutes(),
+              // startHour: start.getHours(),
+              // startMin: start.getMinutes(),
             };
           }
         });
+
+        const result = sleepData.reduce((acc, { label, min, value }) => {
+          if (!acc[label]) {
+            acc[label] = { label, min: 0, value: 0 };
+          }
+          acc[label].min += min;
+          acc[label].value += value;
+          return acc;
+        }, {});
+
+        // Converting the result object back to an array
+        const simplifiedData = Object.values(result);
+        console.log(simplifiedData);
+
         setSleepData((prevSleepData) => ({
           ...prevSleepData,
-          [key]: sleepData,
+          [key]: simplifiedData,
         }));
       } catch (error) {
         console.error("Error saving data", error);
@@ -97,12 +112,12 @@ const MainScreen = () => {
             return startDateString === todayDateString;
           });
           const formattedData = todayData.map((item) => {
-            if (item && typeof item === 'object' && 'value' in item) {
-               const hour = new Date(item.startDate).getHours(); // startDate의 시간 부분
-               return { label: `${hour}`, value: item.value };
+            if (item && typeof item === "object" && "value" in item) {
+              const hour = new Date(item.startDate).getHours(); // startDate의 시간 부분
+              return { label: `${hour}`, value: item.value };
             }
             return null; // or handle the case where item is not an object or doesn't have a value property
-           });
+          });
           // console.log(formattedData);
           setActiveBurned((prevActiveBurned) => ({
             ...prevActiveBurned,
@@ -144,7 +159,7 @@ const MainScreen = () => {
       }
 
       const now = new Date();
-      const offsetInHours = -16;
+      const offsetInHours = -14;
       const today = new Date(
         now.getTime() + (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
       );
@@ -153,10 +168,11 @@ const MainScreen = () => {
       const startOfDay = new Date(
         today.getFullYear(),
         today.getMonth(),
-        today.getDate(),
-        -8
+        today.getDate()
       );
+      startOfDay.setHours(17, 0, 0, 0);
       const endOfDay = new Date();
+      endOfDay.setHours(16, 59, 59, 999);
       console.log("today", today);
       console.log("startOfDay", startOfDay);
       console.log("endOfDay", endOfDay);
@@ -167,15 +183,16 @@ const MainScreen = () => {
           today.getDate() - today.getDay() + (today.getDay() == 0 ? -6 : 1)
         )
       ); // 월요일
-      startOfWeek.setHours(0, 0, 0, 0);
+      startOfWeek.setHours(-7, 0, 0, 0);
       const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6)); // 일요일
       endOfWeek.setHours(16, 59, 59, 999);
 
-      // console.log("startOfWeek", startOfWeek);
-      // console.log("endOfWeek", endOfWeek);
+      console.log("startOfWeek", startOfWeek);
+      console.log("endOfWeek", endOfWeek);
 
       // 이번 달의 시작과 끝
       const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      startOfMonth.setHours(-8, 0, 0, 0);
       const endOfMonth = new Date(
         today.getFullYear(),
         today.getMonth() + 1,
@@ -186,8 +203,8 @@ const MainScreen = () => {
         999
       );
 
-      // console.log("startOfMonth", startOfMonth);
-      // console.log("endOfMonth", endOfMonth);
+      console.log("startOfMonth", startOfMonth);
+      console.log("endOfMonth", endOfMonth);
 
       const fetchDataForPeriod = (startDate, endDate, periodKey) => {
         AppleHealthKit.getSleepSamples(

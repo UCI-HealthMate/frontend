@@ -21,24 +21,24 @@ const LogScreen = () => {
   };
 
   const allergiesList = [
-    "eggs",
-    "fish",
-    "milk",
-    "peanuts",
-    "sesame",
-    "shellfish",
-    "soy",
-    "tree nuts",
-    "wheat",
+    "Eggs",
+    "Fish",
+    "Milk",
+    "Peanuts",
+    "Sesame",
+    "Shellfish",
+    "Soy",
+    "Tree nuts",
+    "Wheat",
   ];
   const prefList = [
-    "gluten free",
-    "halal",
-    "kosher",
-    "locally grown",
-    "organic",
-    "vegan",
-    "vegetarian",
+    "Gluten free",
+    "Halal",
+    "Kosher",
+    "Locally grown",
+    "Organic",
+    "Vegan",
+    "Vegetarian",
   ];
 
   const toggleAllergyCheck = (item) => {
@@ -128,7 +128,7 @@ const LogScreen = () => {
           </ScrollView>
           <View style={styles.horizontalLine} />
           <TouchableOpacity onPress={toggleModal} style={styles.addButton}>
-            <Text style={styles.addButtonText}>update</Text>
+            <Text style={styles.addButtonText}>Update</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   addButtonText: {
-    color: "#fff",
+    color: Colors.primary800,
     fontWeight: "bold",
     textAlign: "center",
   },

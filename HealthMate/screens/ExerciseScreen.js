@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 const deviceWidth = Dimensions.get("window").width;
 
 const ExerciseScreen = ({ route }) => {
-  // console.log(route.params);
+  console.log(route.params);
   const [time, setTime] = useState(0);
   const [calBurn, setCalBurn] = useState(0);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
