@@ -9,12 +9,17 @@ import {
 import CheckBox from "@react-native-community/checkbox";
 import { Colors } from "../constants/styles";
 import { useContext, useEffect, useState } from "react";
+import { getRecommendedMenu } from "../util/auth";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [allergiesChecks, setAllergiesChecks] = useState({});
   const [prefChecks, setPrefChecks] = useState({});
+
+  useEffect(() => {
+    getRecommendedMenu();
+  }, []);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

@@ -108,7 +108,7 @@ const useHealthData = (date) => {
       if (err) {
         return;
       }
-      // console.log(results)
+      console.log(results);
       setSteps(results.value);
     });
     AppleHealthKit.getFlightsClimbed(options, (err, results) => {

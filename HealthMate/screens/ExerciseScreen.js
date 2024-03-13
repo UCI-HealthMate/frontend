@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 const deviceWidth = Dimensions.get("window").width;
 
 const ExerciseScreen = ({ route }) => {
-  console.log(route.params);
+  const { activeBurnedData, standTimeData } = route.params;
+  // console.log(activeBurnedData);
+  // console.log(standTimeData);
   const [time, setTime] = useState(0);
   const [calBurn, setCalBurn] = useState(0);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
@@ -35,30 +37,48 @@ const ExerciseScreen = ({ route }) => {
   useEffect(() => {
     setTime(45);
     if (selectedPeriod === "Day") {
-      setBarData(route.params["today"]);
+      setBarData(activeBurnedData["today"]);
       let activeburned = 0;
-      route.params["today"].map((m) => {
+      let standTime = 0;
+      activeBurnedData["today"].map((m) => {
         activeburned = activeburned + m.value;
       });
-
+      standTimeData["today"].map((m) => {
+        standTime = standTime + m.value;
+      });
+      setTime((standTime / 60).toFixed(0));
       setCalBurn(activeburned);
     } else if (selectedPeriod === "Week") {
-      setBarData(route.params["thisWeek"]);
+      setBarData(activeBurnedData["thisWeek"]);
       let activeburned = 0;
       let count = 0;
-      route.params["thisWeek"].map((m) => {
+      let standTime = 0;
+      activeBurnedData["thisWeek"].map((m) => {
         count += 1;
         activeburned = activeburned + m.value;
       });
+      count = 0;
+      standTimeData["thisWeek"].map((m) => {
+        count += 1;
+        standTime = standTime + m.value;
+      });
+      setTime((standTime / count / 60).toFixed(0));
       setCalBurn(activeburned / count);
     } else if (selectedPeriod === "Month") {
-      setBarData(route.params["thisMonth"]);
+      setBarData(activeBurnedData["thisMonth"]);
       let activeburned = 0;
       let count = 0;
-      route.params["thisMonth"].map((m) => {
+      let standTime = 0;
+      activeBurnedData["thisMonth"].map((m) => {
         count += 1;
         activeburned = activeburned + m.value;
       });
+      count = 0;
+      standTimeData["thisMonth"].map((m) => {
+        count += 1;
+        standTime = standTime + m.value;
+      });
+      setTime((standTime / count / 60).toFixed(0));
       setCalBurn(activeburned / count);
     }
   }, [selectedPeriod]);
@@ -83,7 +103,7 @@ const ExerciseScreen = ({ route }) => {
               rWidth={3}
               rBGWidth={6}
               rTColor={"#B2FAB1"}
-              rFill={40}
+              rFill={time ? (time / 60) * 100 : 0}
             >
               <Text
                 style={{

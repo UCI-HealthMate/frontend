@@ -91,8 +91,9 @@ const Root = () => {
   useEffect(() => {
     const fetchToken = async () => {
       const storedToken = await AsyncStorage.getItem("token");
+      const storedToken2 = await AsyncStorage.getItem("token2");
       if (storedToken) {
-        authCtx.authenticate(storedToken);
+        authCtx.authenticate(storedToken, storedToken2);
       }
       const storedId = await AsyncStorage.getItem("id");
       if (storedId) {

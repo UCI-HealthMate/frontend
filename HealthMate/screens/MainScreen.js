@@ -14,6 +14,7 @@ const MainScreen = () => {
   const [currentDate, setCurrentDate] = useState("");
   const [sleepData, setSleepData] = useState([{}]);
   const [activeBurned, setActiveBurned] = useState([{}]);
+  const [standTime, setStandTime] = useState([{}]);
 
   const navigation = useNavigation();
 
@@ -22,7 +23,10 @@ const MainScreen = () => {
   };
 
   const switchToExercise = () => {
-    navigation.navigate("Exercise", activeBurned);
+    navigation.navigate("Exercise", {
+      activeBurnedData: activeBurned,
+      standTimeData: standTime,
+    });
   };
 
   const switchToSleep = () => {
@@ -48,6 +52,7 @@ const MainScreen = () => {
           AppleHealthKit.Constants.Permissions.AppleExerciseTime,
           AppleHealthKit.Constants.Permissions.SleepAnalysis,
           AppleHealthKit.Constants.Permissions.ActivitySummary,
+          AppleHealthKit.Constants.Permissions.AppleStandTime,
         ],
         // write: [AppleHealthKit.Constants.Permissions.Steps],
       },
@@ -88,7 +93,7 @@ const MainScreen = () => {
 
         // Converting the result object back to an array
         const simplifiedData = Object.values(result);
-        console.log(simplifiedData);
+        // console.log(simplifiedData);
 
         setSleepData((prevSleepData) => ({
           ...prevSleepData,
@@ -152,6 +157,60 @@ const MainScreen = () => {
       }
     };
 
+    const saveStandTime = async (key, data) => {
+      try {
+        if (key === "today") {
+          const today = new Date();
+          const year = today.getFullYear();
+          const month = String(today.getMonth() + 1).padStart(2, "0"); // 1을 더하고, 두 자리로 만들기
+          const day = String(today.getDate()).padStart(2, "0");
+          const todayDateString = `${year}-${month}-${day}`;
+          const todayData = data.filter((item) => {
+            // startDate에서 날짜 부분만 추출
+            const startDateString = item.startDate.substring(0, 10);
+            return startDateString === todayDateString;
+          });
+          const formattedData = todayData.map((item) => {
+            if (item && typeof item === "object" && "value" in item) {
+              const hour = new Date(item.startDate).getHours(); // startDate의 시간 부분
+              return { label: `${hour}`, value: item.value };
+            }
+            return null; // or handle the case where item is not an object or doesn't have a value property
+          });
+          // console.log("Today!!!!!!!!!!!!!!!!!!! : ", formattedData);
+          setStandTime((prevActiveBurned) => ({
+            ...prevActiveBurned,
+            [key]: formattedData,
+          }));
+        } else {
+          const aggregatedData = {};
+
+          data.forEach(({ startDate, value }) => {
+            const day = new Date(startDate).getDate();
+
+            if (aggregatedData[day]) {
+              aggregatedData[day] += value;
+            } else {
+              aggregatedData[day] = value;
+            }
+          });
+
+          const result = Object.entries(aggregatedData).map(
+            ([day, totalValue]) => {
+              return { label: day, value: totalValue };
+            }
+          );
+
+          setStandTime((prevActiveBurned) => ({
+            ...prevActiveBurned,
+            [key]: result,
+          }));
+        }
+      } catch (error) {
+        console.error("Error saving data", error);
+      }
+    };
+
     AppleHealthKit.initHealthKit(permissions, (error) => {
       if (error) {
         console.error("Error initializing HealthKit", error);
@@ -164,13 +223,15 @@ const MainScreen = () => {
         now.getTime() + (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
       );
       // 오늘의 데이터
-      // const today = new Date();
+      const today2 = new Date();
+
       const startOfDay = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
+        today2.getFullYear(),
+        today2.getMonth(),
+        today2.getDate()
       );
-      startOfDay.setHours(17, 0, 0, 0);
+      startOfDay.setHours(-7, 0, 0, 0);
+
       const endOfDay = new Date();
       endOfDay.setHours(16, 59, 59, 999);
       console.log("today", today);
@@ -210,7 +271,7 @@ const MainScreen = () => {
         AppleHealthKit.getSleepSamples(
           {
             startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
+            // endDate: endDate.toISOString(),
             ascending: true,
           },
           (err, results) => {
@@ -223,7 +284,7 @@ const MainScreen = () => {
         AppleHealthKit.getActiveEnergyBurned(
           {
             startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
+            // endDate: endDate.toISOString(),
             ascending: true,
           },
           (err, results) => {
@@ -234,18 +295,18 @@ const MainScreen = () => {
             // console.log(periodKey, results);
           }
         );
-        AppleHealthKit.getActivitySummary(
+        AppleHealthKit.getAppleStandTime(
           {
             startDate: startDate.toISOString(),
-            endDate: endDate.toISOString(),
+            // endDate: endDate.toISOString(),
             ascending: true,
           },
           (err, results) => {
             if (err) {
               return console.error("Error fetching ActivitySummary", err);
             }
-            // saveActiveEnergyBurned(periodKey, results);
-            console.log(periodKey, results);
+            saveStandTime(periodKey, results);
+            // console.log(periodKey, results);
           }
         );
       };

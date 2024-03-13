@@ -15,9 +15,12 @@ const LoginScreen = () => {
   const loginHandler = async ({ email, password }) => {
     setIsAuthenticating(true);
     try {
-      const token = await login(email, password);
+      const tokenData = await login(email, password);
+      console.log("tokenData.token", tokenData.token);
+      console.log("tokenData.token2", tokenData.token2);
+
       const id = email.split("@")[0];
-      authCtx.authenticate(token);
+      authCtx.authenticate(tokenData.token, tokenData.token2);
       authCtx.setUserId(id);
     } catch (err) {
       Alert.alert(

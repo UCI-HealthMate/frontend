@@ -15,9 +15,9 @@ const SignupScreen = () => {
   const signUpHandler = async ({ email, password }) => {
     setIsAuthenticating(true);
     try {
-      const token = await createUser(email, password);
+      const tokenData = await createUser(email, password);
       const id = email.split("@")[0];
-      authCtx.authenticate(token);
+      authCtx.authenticate(tokenData.token, tokenData.token2);
       authCtx.setUserId(id);
     } catch (err) {
       Alert.alert(

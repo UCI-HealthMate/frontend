@@ -9,7 +9,7 @@ const BubbleWithCharacter = ({ children }) => {
       </View>
       <View style={styles.speechBubbleTail} />
       <Image
-        source={require("../../assets/ae.png")}
+        source={require("../../assets/logo1.png")}
         style={styles.characterImage}
       />
     </View>
