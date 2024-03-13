@@ -34,7 +34,7 @@ const AccountScreen = () => {
       <BubbleWithCharacter>
         <View>
           <Text style={{ fontSize: 20, margin: 5, alignSelf: "center" }}>
-            {authCtx.uid}
+            {authCtx.uid?.toUpperCase()}
           </Text>
           <Text style={{ fontSize: 20, margin: 0, alignSelf: "center" }}>
             {biosex} | {birthday}

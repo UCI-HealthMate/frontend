@@ -5,8 +5,7 @@ const screenHeight = Dimensions.get("window").height;
 
 const MealsOverviewScreen = ({ route }) => {
   const { title, data } = route.params;
-  console.log(data);
-  console.log(title);
+
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.title}>{title}</Text>
@@ -18,7 +17,7 @@ const MealsOverviewScreen = ({ route }) => {
         <View style={styles.horizontalLine} />
         <View style={styles.list}>
           <Text style={styles.text1}>Price</Text>
-          <Text style={styles.text2}>$ {data.price}</Text>
+          <Text style={styles.text2}>$ {data.price} </Text>
         </View>
       </View>
     </View>

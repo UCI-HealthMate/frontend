@@ -20,7 +20,10 @@ const ExerciseScreen = ({ route }) => {
   const wText = "Here's your weekly average mins & cal burned!";
   const mText = "Here's your monthly average mins & cal burned!";
 
-  const rDayText1 = "15 mins left until\nYou reach your goal today";
+  const rDayText1 =
+    time > 60
+      ? "You have reach your goal today!"
+      : `${(60 - time).toFixed(0)} mins left until\nYou reach your goal today`;
   const rWeekText1 = "Goal: 60 mins";
   const rMonthText1 = "Goal: 60 mins";
 

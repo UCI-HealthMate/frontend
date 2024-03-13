@@ -40,6 +40,11 @@ const MainScreen = () => {
     burnedToday += m.value;
   });
 
+  let standToday = 0;
+  standTime["today"]?.map((m) => {
+    standToday += m.value;
+  });
+
   useEffect(() => {
     const date = new Date();
     setCurrentDate(formatDate(date));
@@ -344,7 +349,9 @@ const MainScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.dateText}>{currentDate}</Text>
-      <BubbleWithCharacter>Welcome back, {authCtx.uid}!</BubbleWithCharacter>
+      <BubbleWithCharacter>
+        Welcome back, {authCtx.uid?.toUpperCase()}!
+      </BubbleWithCharacter>
       <View style={styles.statsContainer}>
         <View>
           <Pressable onPress={switchToDiet}>
@@ -401,7 +408,7 @@ const MainScreen = () => {
                   color: "white",
                 }}
               >
-                45 mins done
+                {standToday ? (standToday / 60).toFixed(0) : "..."} mins done
               </Text>
               <Text
                 style={{

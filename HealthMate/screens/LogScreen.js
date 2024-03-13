@@ -280,12 +280,15 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   periodTitle: {
-    fontSize: 16,
+    fontSize: 18,
     color: Colors.primary100,
+    marginLeft: 15,
+    marginTop: 15,
+    fontWeight: "600",
   },
   periodBox: {
     backgroundColor: "#252323",
-    marginVertical: 20,
+    marginVertical: 10,
     borderRadius: 8,
     width: "100%",
     padding: 15,
@@ -300,7 +303,7 @@ const styles = StyleSheet.create({
   },
   plusButtonText: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 35,
     fontWeight: "bold",
   },
   horizontalLine: {
@@ -332,7 +335,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
     color: Colors.primary500,
     alignSelf: "center",
-    marginTop: -35,
+    marginTop: -25,
     marginBottom: 10,
   },
   sectionTitle: {
@@ -347,8 +350,10 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 25,
     fontWeight: "bold",
+    marginTop: -20,
+    marginRight: -15,
   },
   addButton: {
     backgroundColor: Colors.primary500,
