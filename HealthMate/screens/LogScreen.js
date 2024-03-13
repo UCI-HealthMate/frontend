@@ -5,14 +5,16 @@ import {
   Modal,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { Colors } from "../constants/styles";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { getRecommendedMenu } from "../util/auth";
 import Meal_Item from "../components/ui/Meal_Item";
+import { AuthContext } from "../store/auth-context";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -79,8 +81,27 @@ const LogScreen = () => {
     },
   ];
 
+  const authCtx = useContext(AuthContext);
+
   useEffect(() => {
-    getRecommendedMenu();
+    const fetchMenu = async () => {
+      try {
+        await getRecommendedMenu();
+      } catch (error) {
+        Alert.alert("Need to Re-Login!", "Please login again!!", [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => authCtx.logout(),
+          },
+        ]);
+      }
+    };
+    fetchMenu();
   }, []);
 
   const toggleModal = () => {

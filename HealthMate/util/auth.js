@@ -29,6 +29,7 @@ export const getRecommendedMenu = async () => {
     console.log("Get Menu/items success:", response.data);
   } catch (error) {
     console.log("Get Menu/items Error: ", error);
+    throw new Error();
   }
 };
 
