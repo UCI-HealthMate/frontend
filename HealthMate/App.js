@@ -8,6 +8,9 @@ import * as SplashScreen from "expo-splash-screen";
 import BottomMenu from "./components/BottomNavigator/BottomMenu";
 import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
+import DietScreen from "./screens/DietScreen";
+import ExerciseScreen from "./screens/ExerciseScreen";
+import SleepScreen from "./screens/SleepScreen";
 import { Colors } from "./constants/styles";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
@@ -23,8 +26,16 @@ const AuthStack = () => {
         contentStyle: { backgroundColor: Colors.primary800 },
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
@@ -43,6 +54,21 @@ const AuthenticatedStack = () => {
         options={{ headerShown: false }}
         name="BottomMenu"
         component={BottomMenu}
+      />
+      <Stack.Screen
+        name="Diet"
+        component={DietScreen}
+        options={{ headerBackTitleVisible: false }}
+      />
+      <Stack.Screen
+        name="Exercise"
+        component={ExerciseScreen}
+        options={{ headerBackTitleVisible: false, headerTintColor: "#B2FAB1" }}
+      />
+      <Stack.Screen
+        name="Sleep"
+        component={SleepScreen}
+        options={{ headerBackTitleVisible: false, headerTintColor: "#B1DBFA" }}
       />
     </Stack.Navigator>
   );
@@ -67,6 +93,10 @@ const Root = () => {
       const storedToken = await AsyncStorage.getItem("token");
       if (storedToken) {
         authCtx.authenticate(storedToken);
+      }
+      const storedId = await AsyncStorage.getItem("id");
+      if (storedId) {
+        authCtx.setUserId(storedId);
       }
       await SplashScreen.hideAsync();
     };

@@ -15,7 +15,7 @@ export default Logo;
 
 const styles = StyleSheet.create({
   textContainer: {
-    marginTop: 110,
+    marginTop: -50,
     padding: 10,
     alignSelf: "center",
   },

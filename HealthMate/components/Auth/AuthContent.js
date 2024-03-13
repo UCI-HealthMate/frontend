@@ -57,7 +57,7 @@ const AuthContent = ({ isLogin, onAuthenticate }) => {
           style={({ pressed }) => [styles.button, pressed && styles.pressed]}
           onPress={switchToLogin}
         >
-          <View style={isLogin ? styles.underLine : null}>
+          <View>
             <Text
               style={isLogin ? styles.buttonText : styles.disableButtonText}
             >
@@ -69,7 +69,7 @@ const AuthContent = ({ isLogin, onAuthenticate }) => {
           style={({ pressed }) => [styles.button, pressed && styles.pressed]}
           onPress={switchToSignup}
         >
-          <View style={!isLogin ? styles.underLine : null}>
+          <View>
             <Text
               style={!isLogin ? styles.buttonText : styles.disableButtonText}
             >
@@ -98,16 +98,11 @@ const styles = StyleSheet.create({
   authContent: {
     marginTop: -20,
     marginHorizontal: 32,
+    marginBottom: 0,
     paddingHorizontal: 30,
     borderRadius: 8,
     backgroundColor: Colors.primary800,
-    // borderWidth: 2,
     elevation: 2,
-    // borderColor: Colors.primary500,
-    // shadowColor: "black",
-    // shadowOffset: { width: 1, height: 1 },
-    // shadowOpacity: 0.35,
-    // shadowRadius: 4,
   },
   buttons: {
     marginTop: 8,
@@ -124,7 +119,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-    color: "#C6B2FA",
+    color: "#F8CECC",
     fontWeight: "500",
     fontSize: 18,
     marginBottom: 5,
