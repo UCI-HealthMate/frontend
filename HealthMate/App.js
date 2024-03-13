@@ -11,6 +11,7 @@ import SignupScreen from "./screens/SignupScreen";
 import DietScreen from "./screens/DietScreen";
 import ExerciseScreen from "./screens/ExerciseScreen";
 import SleepScreen from "./screens/SleepScreen";
+import MealsOverviewScreen from "./screens/MealsOverviewScreen";
 import { Colors } from "./constants/styles";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
@@ -69,6 +70,15 @@ const AuthenticatedStack = () => {
         name="Sleep"
         component={SleepScreen}
         options={{ headerBackTitleVisible: false, headerTintColor: "#B1DBFA" }}
+      />
+      <Stack.Screen
+        name="MealsOverview"
+        component={MealsOverviewScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+          headerBackTitleVisible: false,
+          headerTintColor: Colors.primary500,
+        })}
       />
     </Stack.Navigator>
   );

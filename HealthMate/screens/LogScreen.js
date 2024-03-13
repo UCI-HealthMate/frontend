@@ -8,14 +8,76 @@ import {
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { Colors } from "../constants/styles";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+
 import { getRecommendedMenu } from "../util/auth";
+import Meal_Item from "../components/ui/Meal_Item";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [allergiesChecks, setAllergiesChecks] = useState({});
   const [prefChecks, setPrefChecks] = useState({});
+
+  const navigation = useNavigation();
+
+  const switchToMealOverview = (data) => {
+    navigation.navigate("MealsOverview", { title: data.name, data: data });
+  };
+
+  const breakfastFoodsDummy = [
+    {
+      name: "Oatmeal",
+      calories: 150,
+      price: 3.99,
+    },
+    {
+      name: "Yogurt",
+      calories: 100,
+      price: 2.5,
+    },
+    {
+      name: "Toast",
+      calories: 200,
+      price: 1.99,
+    },
+  ];
+
+  const lunchFoodsDummy = [
+    {
+      name: "Chicken Salad",
+      calories: 350,
+      price: 7.99,
+    },
+    {
+      name: "Ham Sandwich",
+      calories: 400,
+      price: 5.99,
+    },
+    {
+      name: "Vegetable Soup",
+      calories: 200,
+      price: 4.99,
+    },
+  ];
+
+  const dinnerFoodsDummy = [
+    {
+      name: "Grilled Salmon",
+      calories: 500,
+      price: 12.99,
+    },
+    {
+      name: "Beef Steak",
+      calories: 600,
+      price: 15.99,
+    },
+    {
+      name: "Spaghetti Carbonara",
+      calories: 450,
+      price: 8.99,
+    },
+  ];
 
   useEffect(() => {
     getRecommendedMenu();
@@ -138,17 +200,56 @@ const LogScreen = () => {
         </View>
       </Modal>
       <View style={styles.periodContainer}>
-        <Text style={styles.periodTitle}>breakfast</Text>
+        <Text style={styles.periodTitle}>Breakfast</Text>
         <View style={styles.periodBox}>
-          <Text style={styles.periodTitle}>placeholder</Text>
+          {breakfastFoodsDummy.map((data, key) => {
+            return (
+              <Meal_Item
+                key={key}
+                onPress={() => {
+                  switchToMealOverview(data);
+                }}
+              >
+                {key + 1}
+                {". "}
+                {data.name}
+              </Meal_Item>
+            );
+          })}
         </View>
-        <Text style={styles.periodTitle}>lunch</Text>
+        <Text style={styles.periodTitle}>Lunch</Text>
         <View style={styles.periodBox}>
-          <Text style={styles.periodTitle}>placeholder</Text>
+          {lunchFoodsDummy.map((data, key) => {
+            return (
+              <Meal_Item
+                key={key}
+                onPress={() => {
+                  switchToMealOverview(data);
+                }}
+              >
+                {key + 1}
+                {". "}
+                {data.name}
+              </Meal_Item>
+            );
+          })}
         </View>
-        <Text style={styles.periodTitle}>dinner</Text>
+        <Text style={styles.periodTitle}>Dinner</Text>
         <View style={styles.periodBox}>
-          <Text style={styles.periodTitle}>placeholder</Text>
+          {dinnerFoodsDummy.map((data, key) => {
+            return (
+              <Meal_Item
+                key={key}
+                onPress={() => {
+                  switchToMealOverview(data);
+                }}
+              >
+                {key + 1}
+                {". "}
+                {data.name}
+              </Meal_Item>
+            );
+          })}
         </View>
       </View>
     </View>
