@@ -5,16 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const getRecommendedMenu = async () => {
   const url = "http://34.125.134.116:8000/menu/items/";
   const cookieData = await CookieManager.get("http://34.125.134.116:8000");
-  console.log("cookieData", cookieData);
+  // console.log("cookieData", cookieData);
   const accessToken = await AsyncStorage.getItem("token");
   const refreshToken = await AsyncStorage.getItem("token2");
   // const accessToken = cookieData.access_token.value;
   // const refreshToken = cookieData.refresh_token.value;
 
-  console.log("Menu Testing (accessToken): ", accessToken);
-  console.log("Menu Testing (refreshToken): ", refreshToken);
-
-  const data = {};
+  // console.log("Menu Testing (accessToken): ", accessToken);
+  // console.log("Menu Testing (refreshToken): ", refreshToken);
 
   const config = {
     headers: {
@@ -22,13 +20,12 @@ export const getRecommendedMenu = async () => {
       "Content-Type": "application/json",
       "X-CSRFToken":
         "OICT4xVbQee5JXLL0juLBuV9eIBgebt3XFsHExy2yTUxEvPw6Jtryx5HcCdPAA3o",
-      // Cookie: `access_token=${accessToken}; refresh_token=${refreshToken}`,
-      Authorization: `Bearer ${accessToken}`,
+      Cookie: `access_token=${accessToken}; Path=/; HttpOnly;`,
     },
     withCredentials: true,
   };
   try {
-    const response = await axios.get(url, data, config);
+    const response = await axios.get(url, config);
     console.log("Get Menu/items success:", response.data);
   } catch (error) {
     console.log("Get Menu/items Error: ", error);
