@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   periodTitle: {
     fontSize: 18,
     color: Colors.primary100,
-    marginLeft: 15,
+    marginLeft: 20,
     marginTop: 15,
     fontWeight: "600",
   },
@@ -291,7 +291,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 8,
     width: "100%",
-    padding: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 8,
     marginBottom: 8,
   },
   plusButton: {

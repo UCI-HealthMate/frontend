@@ -77,11 +77,10 @@ const useHealthData = (date) => {
     });
     AppleHealthKit.getLatestHeight(options, (err, results) => {
       if (err) {
-        return console.error("Error fetching LatestHeight", err);
+        return;
       }
       // console.log(results);
       setHeight(results.value);
-      return height;
     });
     AppleHealthKit.getLatestWeight(options, (err, results) => {
       if (err) {

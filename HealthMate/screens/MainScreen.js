@@ -53,11 +53,18 @@ const MainScreen = () => {
       permissions: {
         read: [
           AppleHealthKit.Constants.Permissions.ActiveEnergyBurned,
-          AppleHealthKit.Constants.Permissions.StepCount,
           AppleHealthKit.Constants.Permissions.AppleExerciseTime,
           AppleHealthKit.Constants.Permissions.SleepAnalysis,
           AppleHealthKit.Constants.Permissions.ActivitySummary,
           AppleHealthKit.Constants.Permissions.AppleStandTime,
+          AppleHealthKit.Constants.Permissions.BiologicalSex,
+          AppleHealthKit.Constants.Permissions.DateOfBirth,
+          AppleHealthKit.Constants.Permissions.Height,
+          AppleHealthKit.Constants.Permissions.Weight,
+          AppleHealthKit.Constants.Permissions.BodyFatPercentage,
+          AppleHealthKit.Constants.Permissions.BodyMassIndex,
+          AppleHealthKit.Constants.Permissions.StepCount,
+          AppleHealthKit.Constants.Permissions.FlightsClimbed,
         ],
         // write: [AppleHealthKit.Constants.Permissions.Steps],
       },
@@ -65,8 +72,7 @@ const MainScreen = () => {
 
     const saveSleepData = async (key, data) => {
       try {
-        // console.log("Data: ", data);
-        const sleepData = data.map((m) => {
+        const sleepData = data.reduce((acc, m) => {
           if (m.value === "INBED") {
             // console.log(key, m.startDate, m.endDate);
             const startTime = m.startDate;
@@ -77,15 +83,16 @@ const MainScreen = () => {
             const minutesSlept = difference / 1000 / 60;
             const dayOfStart = end.getDate();
 
-            return {
+            acc.push({
               label: dayOfStart,
               value: Math.floor(minutesSlept) / 60,
               min: Math.floor(minutesSlept),
               // startHour: start.getHours(),
               // startMin: start.getMinutes(),
-            };
+            });
           }
-        });
+          return acc;
+        }, []);
 
         const result = sleepData.reduce((acc, { label, min, value }) => {
           if (!acc[label]) {

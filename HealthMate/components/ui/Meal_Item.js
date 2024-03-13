@@ -31,6 +31,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   container: {
-    marginVertical: 12,
+    marginVertical: 10,
   },
 });
