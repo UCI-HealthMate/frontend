@@ -188,7 +188,7 @@ const LogScreen = () => {
                       >
                         <CheckBox
                           disabled={false}
-                          value={allergiesChecks[allergy] || false}
+                          value={allergyItems[allergy] || false}
                           onValueChange={() => toggleAllergyCheck(allergy)}
                           onAnimationType="fill"
                           onCheckColor="#28282B"
@@ -213,7 +213,7 @@ const LogScreen = () => {
                       >
                         <CheckBox
                           disabled={false}
-                          value={prefChecks[pref] || false}
+                          value={prefItems[pref] || false}
                           onValueChange={() => togglePrefCheck(pref)}
                           onAnimationType="fill"
                           onCheckColor="#28282B"
