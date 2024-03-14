@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginHorizontal: 20,
-    marginTop: 40,
   },
   text1: {
     color: "#989898",
