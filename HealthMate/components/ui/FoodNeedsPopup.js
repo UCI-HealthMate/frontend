@@ -29,39 +29,38 @@ const FoodNeedsPopup = ({ isVisible, onClose, title, message }) => {
 };
 
 const styles = StyleSheet.create({
- centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
- },
- modalView: {
-    margin: 20,
-    backgroundColor: Colors.primary100,
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    elevation: 5
- },
- modalTitle: {
-    marginBottom: 15,
-    textAlign: "center"
- },
-//  modalMessage: {
-//     marginBottom: 15,
-//     textAlign: "center"
-//  },
- openButton: {
-    borderRadius: 8,
-    padding: 10,
-    elevation: 2
- },
- textStyle: {
-    color: Colors.primary600,
-    fontWeight: "bold",
-    textAlign: "center",
-    backgroundColor: Colors.primary500
- }
+  centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+  },
+  modalView: {
+      margin: 20,
+      backgroundColor: Colors.primary100,
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      elevation: 5
+  },
+  modalTitle: {
+      marginBottom: 15,
+      textAlign: "center"
+  },
+  //  modalMessage: {
+  //     marginBottom: 15,
+  //     textAlign: "center"
+  //  },
+  openButton: {
+      borderRadius: 8,
+      padding: 10,
+      elevation: 2
+  },
+  textStyle: {
+      color: Colors.primary600,
+      fontWeight: "bold",
+      textAlign: "center",
+  }
 });
 
 export default FoodNeedsPopup;
