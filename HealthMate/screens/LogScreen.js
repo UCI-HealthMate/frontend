@@ -14,10 +14,13 @@ import { useNavigation } from "@react-navigation/native";
 
 import { getRecommendedMenu } from "../util/auth";
 import Meal_Item from "../components/ui/Meal_Item";
+import FoodNeedsPopup from "../components/ui/FoodNeedsPopup";
 import { AuthContext } from "../store/auth-context";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   const [allergiesChecks, setAllergiesChecks] = useState({});
   const [prefChecks, setPrefChecks] = useState({});
 
@@ -88,14 +91,14 @@ const LogScreen = () => {
       try {
         await getRecommendedMenu();
       } catch (error) {
-        Alert.alert("Need to Re-Login!", "Please login again!!", [
+        Alert.alert("Need to Re-Login!", "Please login again!", [
           {
             text: "Cancel",
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel",
           },
           {
-            text: "OK",
+            text: "Got it",
             onPress: () => authCtx.logout(),
           },
         ]);
@@ -107,6 +110,11 @@ const LogScreen = () => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const handleUpdate = () => {
+    toggleModal();
+    setIsAlertVisible(true);
+   };
 
   const allergiesList = [
     "Eggs",
@@ -140,6 +148,11 @@ const LogScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Recommended</Text>
+      <FoodNeedsPopup
+        isVisible={isAlertVisible}
+        onClose={() => setIsAlertVisible(false)}
+        title="Your food needs have been updated."
+      />
       <TouchableOpacity onPress={toggleModal} style={styles.plusButton}>
         <Text style={styles.plusButtonText}>+</Text>
       </TouchableOpacity>
@@ -215,7 +228,7 @@ const LogScreen = () => {
             </View>
           </ScrollView>
           <View style={styles.horizontalLine} />
-          <TouchableOpacity onPress={toggleModal} style={styles.addButton}>
+          <TouchableOpacity onPress={handleUpdate} style={styles.addButton}>
             <Text style={styles.addButtonText}>Update</Text>
           </TouchableOpacity>
         </View>
