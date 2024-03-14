@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { Colors } from "../constants/styles";
 import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import RingChart from "../components/ui/RingChart";
 import BarChart from "../components/ui/BarChart";
@@ -17,23 +18,108 @@ const DietScreen = () => {
   const wText = "Here's your weekly average cal intake!";
   const mText = "Here's your monthly average cal intake!";
 
-  const rDayText1 = "800 calories left to reach your goal today";
+  const rDayText1 =
+    cal >= 1000
+      ? "You have reach your goal today!"
+      : `${(1000 - cal).toFixed(1)} cal left until you reach your goal today`;
   const rWeekText1 = "Goal: 1000 cal";
   const rMonthText1 = "Goal: 1000 cal";
 
   useEffect(() => {
-    setCal(200);
-    setBarData([
-      { value: 250, label: "9a" },
-      { value: 500, label: "12p" },
-      { value: 745, label: "3p" },
-      { value: 320, label: "6p" },
-      { value: 600, label: "9p" },
-      { value: 256, label: "12a" },
-      { value: 300, label: "3a" },
-      { value: 300, label: "6a" },
-    ]);
-  }, []);
+    setBarData([{ value: 0, label: "0" }]);
+    const fetchData = async () => {
+      const rawData = await AsyncStorage.getItem("caloriesIntakeData");
+      const data = JSON.parse(rawData) || [];
+
+      const today = new Date();
+      const startOfDay = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+      startOfDay.setHours(-7, 0, 0, 0);
+      const startOfWeek = new Date(
+        today.setDate(
+          today.getDate() - today.getDay() + (today.getDay() == 0 ? -6 : 1)
+        )
+      );
+      startOfWeek.setHours(-7, 0, 0, 0);
+      const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      startOfMonth.setHours(-8, 0, 0, 0);
+      if (selectedPeriod === "Day") {
+        const todayDataMap = {};
+
+        data.forEach((item) => {
+          const itemDate = new Date(item.date);
+          if (itemDate >= startOfDay) {
+            const hour = itemDate.getUTCHours();
+            const hourLabel = `${hour}`;
+            if (!todayDataMap[hourLabel]) {
+              todayDataMap[hourLabel] = { label: hourLabel, value: 0 };
+            }
+            todayDataMap[hourLabel].value += item.value;
+          }
+        });
+
+        const aggregatedTodayData = Object.values(todayDataMap);
+        // console.log(aggregatedTodayData);
+        let totalCal = 0;
+        aggregatedTodayData?.forEach((i) => {
+          totalCal = totalCal + i.value;
+        });
+        setCal(totalCal);
+        setBarData(aggregatedTodayData);
+      } else if (selectedPeriod === "Week") {
+        const weekData = {};
+        data.forEach((item) => {
+          const itemDate = new Date(item.date);
+          const itemDayString = `${itemDate.getUTCDate()}`;
+
+          if (itemDate >= startOfWeek) {
+            weekData[itemDayString] =
+              (weekData[itemDayString] || 0) + item.value;
+          }
+        });
+        const weekDataArray = Object.keys(weekData).map((key) => ({
+          label: key,
+          value: weekData[key],
+        }));
+        // console.log(weekDataArray);
+        let totalCal = 0;
+        count = 0;
+        weekDataArray?.forEach((i) => {
+          totalCal = totalCal + i.value;
+          count = count + 1;
+        });
+        setCal(totalCal / count);
+        setBarData(weekDataArray);
+      } else if (selectedPeriod === "Month") {
+        const monthData = {};
+        data.forEach((item) => {
+          const itemDate = new Date(item.date);
+          const itemDateString = `${itemDate.getUTCDate()}`;
+          if (itemDate >= startOfMonth) {
+            monthData[itemDateString] =
+              (monthData[itemDateString] || 0) + item.value;
+          }
+        });
+        const monthDataArray = Object.keys(monthData).map((key) => ({
+          label: key,
+          value: monthData[key],
+        }));
+        // console.log(monthDataArray);
+        let totalCal = 0;
+        count = 0;
+        monthDataArray?.forEach((i) => {
+          totalCal = totalCal + i.value;
+          count = count + 1;
+        });
+        setCal(totalCal / count);
+        setBarData(monthDataArray);
+      }
+    };
+    fetchData();
+  }, [selectedPeriod]);
 
   return (
     <View style={styles.rootContainer}>
@@ -53,7 +139,7 @@ const DietScreen = () => {
           rWidth={5}
           rBGWidth={10}
           rTColor={Colors.primary500}
-          rFill={70}
+          rFill={(cal / 1000) * 100}
         >
           <Text
             style={{

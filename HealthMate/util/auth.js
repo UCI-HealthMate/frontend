@@ -2,7 +2,8 @@ import axios from "axios";
 import CookieManager from "@react-native-cookies/cookies";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const getRecommendedMenu = async () => {
+export const getRecommendedMenu = async (data) => {
+  // console.log("On the API:", data);
   const url = "http://34.125.134.116:8000/menu/items/";
   const cookieData = await CookieManager.get("http://34.125.134.116:8000");
   // console.log("cookieData", cookieData);
@@ -23,10 +24,12 @@ export const getRecommendedMenu = async () => {
       Cookie: `access_token=${accessToken}; Path=/; HttpOnly;`,
     },
     withCredentials: true,
+    params: data,
   };
   try {
     const response = await axios.get(url, config);
-    console.log("Get Menu/items success:", response.data);
+    // console.log("Get Menu/items success:", response.data);
+    return response.data;
   } catch (error) {
     console.log("Get Menu/items Error: ", error);
     throw new Error();

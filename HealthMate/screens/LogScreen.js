@@ -11,6 +11,7 @@ import CheckBox from "@react-native-community/checkbox";
 import { Colors } from "../constants/styles";
 import { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getRecommendedMenu } from "../util/auth";
 import Meal_Item from "../components/ui/Meal_Item";
@@ -18,75 +19,75 @@ import { AuthContext } from "../store/auth-context";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [allergiesChecks, setAllergiesChecks] = useState({});
-  const [prefChecks, setPrefChecks] = useState({});
+  const [allergiesChecks, setAllergiesChecks] = useState({
+    containsEggs: false,
+    containsFish: false,
+    containsMilk: false,
+    containsPeanuts: false,
+    containsSesame: false,
+    containsShellfish: false,
+    containsSoy: false,
+    containsTreeNuts: false,
+    containsWheat: false,
+  });
+  const [prefChecks, setPrefChecks] = useState({
+    isGlutenFree: false,
+    isHalal: false,
+    isKosher: false,
+    isLocallyGrown: false,
+    isOrganic: false,
+    isVegan: false,
+    isVegetarian: false,
+  });
+  const [mealData, setMealData] = useState({});
 
   const navigation = useNavigation();
 
-  const switchToMealOverview = (data) => {
-    navigation.navigate("MealsOverview", { title: data.name, data: data });
+  const switchToMealOverview = (name, data) => {
+    navigation.navigate("MealsOverview", { title: name, data: data });
   };
 
-  const breakfastFoodsDummy = [
-    {
-      name: "Oatmeal",
-      calories: 150,
-      price: 3.99,
-    },
-    {
-      name: "Yogurt",
-      calories: 100,
-      price: 2.5,
-    },
-    {
-      name: "Toast",
-      calories: 200,
-      price: 1.99,
-    },
-  ];
-
-  const lunchFoodsDummy = [
-    {
-      name: "Chicken Salad",
-      calories: 350,
-      price: 7.99,
-    },
-    {
-      name: "Ham Sandwich",
-      calories: 400,
-      price: 5.99,
-    },
-    {
-      name: "Vegetable Soup",
-      calories: 200,
-      price: 4.99,
-    },
-  ];
-
-  const dinnerFoodsDummy = [
-    {
-      name: "Grilled Salmon",
-      calories: 500,
-      price: 12.99,
-    },
-    {
-      name: "Beef Steak",
-      calories: 600,
-      price: 15.99,
-    },
-    {
-      name: "Spaghetti Carbonara",
-      calories: 450,
-      price: 8.99,
-    },
-  ];
+  const breakFastData = mealData?.Breakfast;
+  const lunchData = mealData?.Lunch;
+  const dinnerData = mealData?.Dinner;
 
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        await getRecommendedMenu();
+        const jsonStringAllergy = await AsyncStorage.getItem("allergy");
+        // console.log("json:", jsonStringAllergy);
+        const jsonStringPref = await AsyncStorage.getItem("pref");
+        // console.log("json:", jsonStringPref);
+        if (jsonStringAllergy === null && jsonStringPref === null) {
+          Alert.alert(
+            "Food Needs",
+            "Please update your food needs!!!\nAfter pressing the plus button on the top right, you can select your food needs."
+          );
+        } else if (jsonStringAllergy !== null && jsonStringPref !== null) {
+          const allergies = await JSON.parse(jsonStringAllergy);
+          const pref = await JSON.parse(jsonStringPref);
+
+          setAllergiesChecks((prevAllergies) => ({
+            ...prevAllergies,
+            ...allergies,
+          }));
+          setPrefChecks((prevPref) => ({
+            ...prevPref,
+            ...pref,
+          }));
+          // console.log("Loaded preferences:", allergies);
+          // console.log("Loaded preferences:", pref);
+          const combinedNeeds = { ...allergies, ...pref };
+          // console.log("Before sending to API: ", combinedNeeds);
+          const meal = await getRecommendedMenu(combinedNeeds);
+          setMealData((prevMeal) => ({
+            ...prevMeal,
+            ...meal,
+          }));
+          // console.log(mealData);
+        }
       } catch (error) {
         Alert.alert("Need to Re-Login!", "Please login again!!", [
           {
@@ -104,30 +105,62 @@ const LogScreen = () => {
     fetchMenu();
   }, []);
 
+  const allergiesList = [
+    { name: "Eggs", value: "containsEggs" },
+    { name: "Fish", value: "containsFish" },
+    { name: "Milk", value: "containsMilk" },
+    { name: "Peanuts", value: "containsPeanuts" },
+    { name: "Sesame", value: "containsSesame" },
+    { name: "Shellfish", value: "containsShellfish" },
+    { name: "Soy", value: "containsSoy" },
+    { name: "Tree nuts", value: "containsTreeNuts" },
+    { name: "Wheat", value: "containsWheat" },
+  ];
+
+  const prefList = [
+    { name: "Gluten free", value: "isGlutenFree" },
+    { name: "Halal", value: "isHalal" },
+    { name: "Kosher", value: "isKosher" },
+    { name: "Locally grown", value: "isLocallyGrown" },
+    { name: "Organic", value: "isOrganic" },
+    { name: "Vegan", value: "isVegan" },
+    { name: "Vegetarian", value: "isVegetarian" },
+  ];
+
+  const updateNeeds = async () => {
+    try {
+      const jsonStringAllergy = JSON.stringify(allergiesChecks);
+      const jsonStringPref = JSON.stringify(prefChecks);
+      await AsyncStorage.setItem("allergy", jsonStringAllergy);
+      await AsyncStorage.setItem("pref", jsonStringPref);
+      const combinedNeeds = { ...allergiesChecks, ...prefChecks };
+      // console.log(combinedNeeds);
+      const meal = await getRecommendedMenu(combinedNeeds);
+      setMealData((prevMeal) => ({
+        ...prevMeal,
+        ...meal,
+      }));
+      console.log(mealData);
+      setModalVisible(!isModalVisible);
+    } catch (erorr) {
+      // console.error('Failed to save the preferences.', e);
+      Alert.alert("Need to Re-Login!", "Please login again!!", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => authCtx.logout(),
+        },
+      ]);
+    }
+  };
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-
-  const allergiesList = [
-    "Eggs",
-    "Fish",
-    "Milk",
-    "Peanuts",
-    "Sesame",
-    "Shellfish",
-    "Soy",
-    "Tree nuts",
-    "Wheat",
-  ];
-  const prefList = [
-    "Gluten free",
-    "Halal",
-    "Kosher",
-    "Locally grown",
-    "Organic",
-    "Vegan",
-    "Vegetarian",
-  ];
 
   const toggleAllergyCheck = (item) => {
     setAllergiesChecks((prev) => ({ ...prev, [item]: !prev[item] }));
@@ -167,7 +200,7 @@ const LogScreen = () => {
                 {allergiesList.map((allergy, i) => {
                   return (
                     <View style={styles.toggleSection} key={i}>
-                      <Text style={styles.sectionText}>{allergy}</Text>
+                      <Text style={styles.sectionText}>{allergy.name}</Text>
                       <View
                         style={{
                           transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
@@ -175,8 +208,10 @@ const LogScreen = () => {
                       >
                         <CheckBox
                           disabled={false}
-                          value={allergiesChecks[allergy] || false}
-                          onValueChange={() => toggleAllergyCheck(allergy)}
+                          value={allergiesChecks[allergy.value] || false}
+                          onValueChange={() =>
+                            toggleAllergyCheck(allergy.value)
+                          }
                           onAnimationType="fill"
                           onCheckColor="#28282B"
                           onFillColor="#FFC9CB"
@@ -192,7 +227,7 @@ const LogScreen = () => {
                 {prefList.map((pref, i) => {
                   return (
                     <View style={styles.toggleSection} key={i}>
-                      <Text style={styles.sectionText}>{pref}</Text>
+                      <Text style={styles.sectionText}>{pref.name}</Text>
                       <View
                         style={{
                           transform: [{ scaleX: 0.7 }, { scaleY: 0.7 }],
@@ -200,8 +235,8 @@ const LogScreen = () => {
                       >
                         <CheckBox
                           disabled={false}
-                          value={prefChecks[pref] || false}
-                          onValueChange={() => togglePrefCheck(pref)}
+                          value={prefChecks[pref.value] || false}
+                          onValueChange={() => togglePrefCheck(pref.value)}
                           onAnimationType="fill"
                           onCheckColor="#28282B"
                           onFillColor="#FFC9CB"
@@ -215,7 +250,7 @@ const LogScreen = () => {
             </View>
           </ScrollView>
           <View style={styles.horizontalLine} />
-          <TouchableOpacity onPress={toggleModal} style={styles.addButton}>
+          <TouchableOpacity onPress={updateNeeds} style={styles.addButton}>
             <Text style={styles.addButtonText}>Update</Text>
           </TouchableOpacity>
         </View>
@@ -223,54 +258,75 @@ const LogScreen = () => {
       <View style={styles.periodContainer}>
         <Text style={styles.periodTitle}>Breakfast</Text>
         <View style={styles.periodBox}>
-          {breakfastFoodsDummy.map((data, key) => {
-            return (
-              <Meal_Item
-                key={key}
-                onPress={() => {
-                  switchToMealOverview(data);
-                }}
-              >
-                {key + 1}
-                {". "}
-                {data.name}
-              </Meal_Item>
-            );
-          })}
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Breakfast #1", breakFastData?.["1"]);
+            }}
+          >
+            Recommended Breakfast #1
+          </Meal_Item>
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Breakfast #2", breakFastData?.["2"]);
+            }}
+          >
+            Recommended Breakfast #2
+          </Meal_Item>
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Breakfast #3", breakFastData?.["3"]);
+            }}
+          >
+            Recommended Breakfast #3
+          </Meal_Item>
         </View>
         <Text style={styles.periodTitle}>Lunch</Text>
         <View style={styles.periodBox}>
-          {lunchFoodsDummy.map((data, key) => {
-            return (
-              <Meal_Item
-                key={key}
-                onPress={() => {
-                  switchToMealOverview(data);
-                }}
-              >
-                {key + 1}
-                {". "}
-                {data.name}
-              </Meal_Item>
-            );
-          })}
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Lunch #1", lunchData?.["1"]);
+            }}
+          >
+            Recommended Lunch #1
+          </Meal_Item>
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Lunch #2", lunchData?.["2"]);
+            }}
+          >
+            Recommended Lunch #2
+          </Meal_Item>
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Lunch #3", lunchData?.["3"]);
+            }}
+          >
+            Recommended Lunch #3
+          </Meal_Item>
         </View>
         <Text style={styles.periodTitle}>Dinner</Text>
         <View style={styles.periodBox}>
-          {dinnerFoodsDummy.map((data, key) => {
-            return (
-              <Meal_Item
-                key={key}
-                onPress={() => {
-                  switchToMealOverview(data);
-                }}
-              >
-                {key + 1}
-                {". "}
-                {data.name}
-              </Meal_Item>
-            );
-          })}
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Dinner #1", dinnerData?.["1"]);
+            }}
+          >
+            Recommended Dinner #1
+          </Meal_Item>
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Dinner #2", dinnerData?.["2"]);
+            }}
+          >
+            Recommended Dinner #2
+          </Meal_Item>
+          <Meal_Item
+            onPress={() => {
+              switchToMealOverview("Dinner #3", dinnerData?.["3"]);
+            }}
+          >
+            Recommended Dinner #3
+          </Meal_Item>
         </View>
       </View>
     </View>
