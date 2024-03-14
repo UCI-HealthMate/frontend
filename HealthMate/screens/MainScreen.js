@@ -287,9 +287,9 @@ const MainScreen = () => {
 
         const endOfDay = new Date();
         endOfDay.setHours(16, 59, 59, 999);
-        // console.log("today", today);
-        // console.log("startOfDay", startOfDay);
-        // console.log("endOfDay", endOfDay);
+        console.log("today", today);
+        console.log("startOfDay", startOfDay);
+        console.log("endOfDay", endOfDay);
 
         // 이번 주의 시작과 끝을 계산
         const startOfWeek = new Date(
@@ -301,8 +301,8 @@ const MainScreen = () => {
         const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6)); // 일요일
         endOfWeek.setHours(16, 59, 59, 999);
 
-        // console.log("startOfWeek", startOfWeek);
-        // console.log("endOfWeek", endOfWeek);
+        console.log("startOfWeek", startOfWeek);
+        console.log("endOfWeek", endOfWeek);
 
         // 이번 달의 시작과 끝
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -317,8 +317,8 @@ const MainScreen = () => {
           999
         );
 
-        // console.log("startOfMonth", startOfMonth);
-        // console.log("endOfMonth", endOfMonth);
+        console.log("startOfMonth", startOfMonth);
+        console.log("endOfMonth", endOfMonth);
 
         const fetchDataForPeriod = (startDate, endDate, periodKey) => {
           AppleHealthKit.getSleepSamples(
