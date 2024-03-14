@@ -36,7 +36,7 @@ const MealsOverviewScreen = ({ route }) => {
         {
           text: "OK",
           onPress: async () => {
-            console.log("Take it!!!: ", totalCalories);
+            // console.log("Take it!!!: ", totalCalories);
             const now = new Date();
             const offsetInHours = -14;
             const currentDate = new Date(
@@ -54,7 +54,7 @@ const MealsOverviewScreen = ({ route }) => {
                 "caloriesIntakeData",
                 JSON.stringify(newData)
               );
-              console.log("Calories data saved successfully");
+              // console.log("Calories data saved successfully");
             } catch (error) {
               console.log("Failed to save calories data", error);
             }

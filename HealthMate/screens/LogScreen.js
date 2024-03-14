@@ -140,7 +140,7 @@ const LogScreen = () => {
         ...prevMeal,
         ...meal,
       }));
-      console.log(mealData);
+      // console.log(mealData);
       setModalVisible(!isModalVisible);
     } catch (erorr) {
       // console.error('Failed to save the preferences.', e);

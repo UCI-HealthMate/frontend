@@ -54,7 +54,7 @@ export const createUser = async (email, password) => {
 
   try {
     const response = await axios.post(url, data, config);
-    console.log("Signup success:", response.data);
+    // console.log("Signup success:", response.data);
 
     if (response.headers["set-cookie"]) {
       const cookieData = await CookieManager.get("http://34.125.134.116:8000");
@@ -97,7 +97,7 @@ export const login = async (email, password) => {
 
   try {
     const response = await axios.post(url, data, config);
-    console.log("Login success:", response.data);
+    // console.log("Login success:", response.data);
 
     if (response.headers["set-cookie"]) {
       const cookieData = await CookieManager.get("http://34.125.134.116:8000");
@@ -139,9 +139,9 @@ export const loginOut = async () => {
 
   try {
     const response = await axios.post(url, data, config);
-    console.log("Logout success:", response.data);
+    // console.log("Logout success:", response.data);
     await CookieManager.clearAll();
-    console.log("Cookies cleared successfully");
+    // console.log("Cookies cleared successfully");
   } catch (error) {
     console.error("Error clearing cookies:", error);
     // if (error.response) {
