@@ -495,7 +495,7 @@ const MainScreen = () => {
                   color: "white",
                 }}
               >
-                {standToday ? (standToday / 60).toFixed(0) : "..."} mins done
+                {standToday ? (standToday / 60).toFixed(0) : 0} mins done
               </Text>
               <Text
                 style={{
@@ -505,7 +505,7 @@ const MainScreen = () => {
                 }}
               >
                 {/* 350 cal burned */}
-                {burnedToday ? burnedToday.toFixed(1) : "..."} cal burned
+                {burnedToday ? burnedToday.toFixed(1) : 0} cal burned
               </Text>
             </RingChart>
           </Pressable>
@@ -539,7 +539,8 @@ const MainScreen = () => {
               >
                 {sleepData["today"]?.[0]?.value
                   ? `${sleepData["today"][0].value.toFixed(1)} hours`
-                  : "..."}
+                  : 0}{" "}
+                hours
               </Text>
             </RingChart>
           </Pressable>

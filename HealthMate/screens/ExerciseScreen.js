@@ -38,7 +38,7 @@ const ExerciseScreen = ({ route }) => {
   const rMonthText2 = "Goal: 600 cals";
 
   useEffect(() => {
-    setTime(45);
+    setTime(0);
     if (selectedPeriod === "Day") {
       setBarData(activeBurnedData["today"]);
       let activeburned = 0;
@@ -60,13 +60,19 @@ const ExerciseScreen = ({ route }) => {
         count += 1;
         activeburned = activeburned + m.value;
       });
+      if (count === 0) {
+        setCalBurn(0);
+      }
+      setCalBurn(activeburned / count);
       count = 0;
       standTimeData["thisWeek"].map((m) => {
         count += 1;
         standTime = standTime + m.value;
       });
+      if (count === 0) {
+        setTime(0);
+      }
       setTime((standTime / count / 60).toFixed(0));
-      setCalBurn(activeburned / count);
     } else if (selectedPeriod === "Month") {
       setBarData(activeBurnedData["thisMonth"]);
       let activeburned = 0;
@@ -76,13 +82,19 @@ const ExerciseScreen = ({ route }) => {
         count += 1;
         activeburned = activeburned + m.value;
       });
+      if (count === 0) {
+        setCalBurn(0);
+      }
+      setCalBurn(activeburned / count);
       count = 0;
       standTimeData["thisMonth"].map((m) => {
         count += 1;
         standTime = standTime + m.value;
       });
+      if (count === 0) {
+        setTime(0);
+      }
       setTime((standTime / count / 60).toFixed(0));
-      setCalBurn(activeburned / count);
     }
   }, [selectedPeriod]);
 
