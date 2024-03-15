@@ -52,9 +52,13 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   characterImage: {
+<<<<<<< HEAD
     // height: 167, // 캐릭터 이미지 높이 조정
     // width: 154,
     height: 150,
+=======
+    height: 150, // 캐릭터 이미지 높이 조정
+>>>>>>> feat/#4
     width: 135,
     alignSelf: "flex-end",
     marginTop: -30,

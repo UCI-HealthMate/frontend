@@ -1,23 +1,100 @@
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Alert,
+} from "react-native";
 import { Colors } from "../constants/styles";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const screenHeight = Dimensions.get("window").height;
+import Button from "../components/ui/Button";
+
+const deviceWidth = Dimensions.get("window").width;
 
 const MealsOverviewScreen = ({ route }) => {
   const { title, data } = route.params;
 
+  // console.log("MealsOverviewScreen", data);
+
+  const navigation = useNavigation();
+
+  let totalCalories = 0;
+
+  const updateTotalCalories = () => {
+    Alert.alert(
+      "Need to confirm!",
+      `Its calories is ${totalCalories} cal\n Are you sure to eat this food?!`,
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            // console.log("Take it!!!: ", totalCalories);
+            const now = new Date();
+            const offsetInHours = -14;
+            const currentDate = new Date(
+              now.getTime() +
+                (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
+            );
+            console.log(currentDate);
+            try {
+              const existingData = await AsyncStorage.getItem(
+                "caloriesIntakeData"
+              );
+              let newData = JSON.parse(existingData) || [];
+              newData.push({ date: currentDate, value: totalCalories });
+              await AsyncStorage.setItem(
+                "caloriesIntakeData",
+                JSON.stringify(newData)
+              );
+              // console.log("Calories data saved successfully");
+            } catch (error) {
+              console.log("Failed to save calories data", error);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const switchToMealOverview = (name, mData) => {
+    navigation.navigate("MealsDetailOverview", { title: name, data: mData });
+  };
+
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{title.split(" ")[0]}</Text>
       <View style={styles.infoContainer}>
-        <View style={styles.list}>
-          <Text style={styles.text1}>Calories</Text>
-          <Text style={styles.text2}>{data.calories} cal</Text>
-        </View>
-        <View style={styles.horizontalLine} />
-        <View style={styles.list}>
-          <Text style={styles.text1}>Price</Text>
-          <Text style={styles.text2}>$ {data.price} </Text>
+        {data?.map((m, key) => {
+          totalCalories = totalCalories + m.calories;
+          return (
+            <View key={key}>
+              <Pressable
+                onPress={() => {
+                  switchToMealOverview(m.name, m);
+                }}
+              >
+                <View style={styles.list}>
+                  <Text style={styles.text1}>{m.name}</Text>
+                  <Text style={styles.text2}>{m.calories} Calories</Text>
+                </View>
+              </Pressable>
+              <View style={styles.horizontalLine} />
+            </View>
+          );
+        })}
+        <Text style={styles.total}>
+          Total Calories:{"     "} {totalCalories} cal
+        </Text>
+        <View style={styles.button}>
+          <Button onPress={updateTotalCalories}>Gobble</Button>
         </View>
       </View>
     </View>
@@ -31,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     // alignItems: "center",
-    padding: 32,
+    padding: 20,
   },
   title: {
     fontSize: 20,
@@ -44,26 +121,38 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 8,
     width: "100%",
-    height: screenHeight - 250,
-    padding: 20,
+    height: deviceWidth < 400 ? 600 : 620,
+    padding: 10,
     marginBottom: 10,
   },
   list: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: 20,
+    flexDirection: "column",
+    // justifyContent: "space-between",
+    marginHorizontal: 1,
+    marginVertical: 1,
   },
   text1: {
-    color: "#989898",
-    fontSize: 18,
-  },
-  text2: {
     color: "#FFFFFF",
     fontSize: 18,
+    marginVertical: 5,
+  },
+  text2: {
+    color: "#989898",
+    fontSize: 16,
+    marginVertical: 5,
   },
   horizontalLine: {
     borderBottomColor: "#989898",
     borderBottomWidth: 1,
     marginVertical: 15,
+  },
+  total: {
+    color: Colors.primary500,
+    fontSize: 18,
+    fontWeight: "700",
+    marginTop: 10,
+  },
+  button: {
+    marginTop: deviceWidth < 400 ? 20 : 30,
   },
 });
