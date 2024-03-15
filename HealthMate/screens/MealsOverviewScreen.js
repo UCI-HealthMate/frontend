@@ -89,7 +89,7 @@ const MealsOverviewScreen = ({ route }) => {
         <OptionalPopup
           isVisible={isPopupVisible}
           onClose={() => setIsPopupVisible(!isPopupVisible)}
-          title="Confirmation"
+          title="Food Confirmation"
           message={`This meal is ${totalCalories} cal.\n Do you still want to eat this food?`}
           onPressYes={updateTotalCalories}
       />
