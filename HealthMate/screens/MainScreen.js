@@ -81,7 +81,7 @@ const MainScreen = () => {
             const end = new Date(endTime);
             const difference = end - start;
             const minutesSlept = difference / 1000 / 60;
-            const dayOfStart = end.getDate();
+            const dayOfStart = end.getUTCDate();
 
             acc.push({
               label: dayOfStart,
