@@ -16,9 +16,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getRecommendedMenu } from "../util/auth";
 import Meal_Item from "../components/ui/Meal_Item";
 import { AuthContext } from "../store/auth-context";
+import FoodNeedsPopup from "../components/ui/FoodNeedsPopup";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   const [allergiesChecks, setAllergiesChecks] = useState({
     containsEggs: false,
     containsFish: false,
@@ -142,6 +145,8 @@ const LogScreen = () => {
       }));
       // console.log(mealData);
       setModalVisible(!isModalVisible);
+      setIsAlertVisible(true);
+
     } catch (erorr) {
       // console.error('Failed to save the preferences.', e);
       Alert.alert("Need to Re-Login!", "Please login again!!", [
@@ -173,6 +178,12 @@ const LogScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Recommended</Text>
+      <FoodNeedsPopup
+        isVisible={isAlertVisible}
+        onClose={() => setIsAlertVisible(false)}
+        title="Food Needs Updated!"
+        message="You can now view the updated recommended meals."
+      />
       <TouchableOpacity onPress={toggleModal} style={styles.plusButton}>
         <Text style={styles.plusButtonText}>+</Text>
       </TouchableOpacity>
