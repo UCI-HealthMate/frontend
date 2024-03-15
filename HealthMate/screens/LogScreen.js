@@ -23,6 +23,7 @@ const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [foodNeedsUpdated, setFoodNeedsUpdated] = useState(false);
   const [foodNeedsReq, setFoodNeedsReq] = useState(false);
+  const [reloginReq, setReloginReq] = useState(false);
 
   const [allergiesChecks, setAllergiesChecks] = useState({
     containsEggs: false,
@@ -54,6 +55,10 @@ const LogScreen = () => {
 
   const handleUpdateReqPopup = () => {
     setFoodNeedsReq(true);
+  };
+
+  const handleReloginReqPopup = () => {
+    setReloginReq(true);
   };
 
   const breakFastData = mealData?.Breakfast;
@@ -95,17 +100,19 @@ const LogScreen = () => {
           // console.log(mealData);
         }
       } catch (error) {
-        Alert.alert("Need to Re-Login!", "Please login again!!", [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
-          },
-          {
-            text: "OK",
-            onPress: () => authCtx.logout(),
-          },
-        ]);
+        // Alert.alert("Need to Re-Login!", "Please login again!!", [
+        //   {
+        //     text: "Cancel",
+        //     onPress: () => console.log("Cancel Pressed"),
+        //     style: "cancel",
+        //   },
+        //   {
+        //     text: "OK",
+        //     onPress: () => authCtx.logout(),
+        //   },
+        // ]);
+        handleReloginReqPopup();
+
       }
     };
     fetchMenu();
@@ -150,19 +157,21 @@ const LogScreen = () => {
       setModalVisible(!isModalVisible);
       setFoodNeedsUpdated(true);
 
-    } catch (erorr) {
+    } catch (error) {
       // console.error('Failed to save the preferences.', e);
-      Alert.alert("Need to Re-Login!", "Please login again!!", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: () => authCtx.logout(),
-        },
-      ]);
+      // Alert.alert("Need to Re-Login!", "Please login again!!", [
+      //   {
+      //     text: "Cancel",
+      //     onPress: () => console.log("Cancel Pressed"),
+      //     style: "cancel",
+      //   },
+      //   {
+      //     text: "OK",
+      //     onPress: () => authCtx.logout(),
+      //   },
+      // ]
+      // );
+      handleReloginReqPopup();
     }
   };
 
@@ -180,7 +189,7 @@ const LogScreen = () => {
 
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.title}>Recommended</Text>
+      <Text style={styles.title}>Recommended Food</Text>
       <FoodNeedsPopup
         isVisible={foodNeedsUpdated}
         onClose={() => setFoodNeedsUpdated(false)}
@@ -192,6 +201,13 @@ const LogScreen = () => {
         onClose={() => setFoodNeedsReq(false)}
         title="Update your food needs!"
         message="Press the plus sign at the top right and select your food needs."
+      />
+      <OptionalPopup
+          isVisible={reloginReq}
+          onClose={() => {setReloginReq(false); console.log("Cancel Pressed")}}
+          title="Re-Login Required!"
+          message={`Press "Confirm" to go back to the login screen.`}
+          onPressYes={() => authCtx.logout()}
       />
       <TouchableOpacity onPress={toggleModal} style={styles.plusButton}>
         <Text style={styles.plusButtonText}>+</Text>

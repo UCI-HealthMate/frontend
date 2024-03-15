@@ -29,7 +29,7 @@ const FoodNeedsPopup = ({ isVisible, onClose, title, message, onPressYes }) => {
                 onClose();
             }}
           >
-            <Text style={styles.yesStyle}>Yes, I'm sure!</Text>
+            <Text style={styles.yesStyle}>Confirm</Text>
           </TouchableHighlight>
         </View>
       </View>
