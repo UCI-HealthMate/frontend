@@ -4,18 +4,20 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
-  Alert,
 } from "react-native";
+import { useState } from "react";
 import { Colors } from "../constants/styles";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Button from "../components/ui/Button";
+import OptionalPopup from "../components/ui/OptionalPopup";
 
 const deviceWidth = Dimensions.get("window").width;
 
 const MealsOverviewScreen = ({ route }) => {
   const { title, data } = route.params;
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   // console.log("MealsOverviewScreen", data);
 
@@ -23,46 +25,34 @@ const MealsOverviewScreen = ({ route }) => {
 
   let totalCalories = 0;
 
-  const updateTotalCalories = () => {
-    Alert.alert(
-      "Need to confirm!",
-      `Its calories is ${totalCalories} cal\n Are you sure to eat this food?!`,
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: async () => {
-            // console.log("Take it!!!: ", totalCalories);
-            const now = new Date();
-            const offsetInHours = -14;
-            const currentDate = new Date(
-              now.getTime() +
-                (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
-            );
-            console.log(currentDate);
-            try {
-              const existingData = await AsyncStorage.getItem(
-                "caloriesIntakeData"
-              );
-              let newData = JSON.parse(existingData) || [];
-              newData.push({ date: currentDate, value: totalCalories });
-              await AsyncStorage.setItem(
-                "caloriesIntakeData",
-                JSON.stringify(newData)
-              );
-              // console.log("Calories data saved successfully");
-            } catch (error) {
-              console.log("Failed to save calories data", error);
-            }
-          },
-        },
-      ]
-    );
+  const handleGobblePress = () => {
+    setIsPopupVisible(true);
   };
+
+  const updateTotalCalories = async () => {
+    // console.log("Take it!!!: ", totalCalories);
+    const now = new Date();
+    const offsetInHours = -14;
+    const currentDate = new Date(
+       now.getTime() +
+         (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
+    );
+    console.log(currentDate);
+    try {
+       const existingData = await AsyncStorage.getItem(
+         "caloriesIntakeData"
+       );
+       let newData = JSON.parse(existingData) || [];
+       newData.push({ date: currentDate, value: totalCalories });
+       await AsyncStorage.setItem(
+         "caloriesIntakeData",
+         JSON.stringify(newData)
+       );
+       // console.log("Calories data saved successfully");
+    } catch (error) {
+       console.log("Failed to save calories data", error);
+    }
+   };
 
   const switchToMealOverview = (name, mData) => {
     navigation.navigate("MealsDetailOverview", { title: name, data: mData });
@@ -94,8 +84,16 @@ const MealsOverviewScreen = ({ route }) => {
           Total Calories:{"     "} {totalCalories} cal
         </Text>
         <View style={styles.button}>
-          <Button onPress={updateTotalCalories}>Gobble</Button>
+          <Button onPress={handleGobblePress}>Gobble</Button>
         </View>
+        <OptionalPopup
+          isVisible={isPopupVisible}
+          onClose={() => setIsPopupVisible(!isPopupVisible)}
+          title="Confirmation"
+          message={`This meal is ${totalCalories} cal.\n Do you still want to eat this food?`}
+          onPressYes={updateTotalCalories}
+      />
+
       </View>
     </View>
   );
