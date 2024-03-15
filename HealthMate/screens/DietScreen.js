@@ -19,11 +19,11 @@ const DietScreen = () => {
   const mText = "Here's your monthly average cal intake!";
 
   const rDayText1 =
-    cal >= 1000
+    cal >= 2500
       ? "You have reach your goal today!"
-      : `${(1000 - cal).toFixed(1)} cal left until you reach your goal today`;
-  const rWeekText1 = "Goal: 1000 cal";
-  const rMonthText1 = "Goal: 1000 cal";
+      : `${(2500 - cal).toFixed(1)} cal left until you reach your goal today`;
+  const rWeekText1 = "Goal: 2500 cal";
+  const rMonthText1 = "Goal: 2500 cal";
 
   useEffect(() => {
     setBarData([{ value: 0, label: "0" }]);
@@ -139,7 +139,7 @@ const DietScreen = () => {
           rWidth={5}
           rBGWidth={10}
           rTColor={Colors.primary500}
-          rFill={(cal / 1000) * 100}
+          rFill={(cal / 2500) * 100}
         >
           <Text
             style={{

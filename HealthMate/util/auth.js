@@ -32,7 +32,7 @@ export const getRecommendedMenu = async (data) => {
   };
   try {
     const response = await axios.get(url, config);
-    // console.log("Get Menu/items success:", response.data);
+    console.log("Get Menu/items success:", response.data);
     return response.data;
   } catch (error) {
     console.log("Get Menu/items Error: ", error);
@@ -101,7 +101,7 @@ export const login = async (email, password) => {
 
   try {
     const response = await axios.post(url, data, config);
-    // console.log("Login success:", response.data);
+    console.log("Login success:", response.data);
 
     if (response.headers["set-cookie"]) {
       const cookieData = await CookieManager.get("http://34.125.134.116:8000");

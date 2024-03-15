@@ -58,7 +58,8 @@ const MainScreen = () => {
     try {
       const existingData = await AsyncStorage.getItem("userInfo");
       let userInfo = JSON.parse(existingData) || {};
-      userInfo["timeInBed"] = sleepData["today"]?.[0]?.value.toFixed(1);
+      userInfo["timeInBed"] = sleepData["today"]?.[0]?.value.toFixed(1) || 7;
+
       userInfo["calories"] = burnedToday?.toFixed(1);
 
       // console.log(userInfo);
@@ -323,9 +324,9 @@ const MainScreen = () => {
 
         const endOfDay = new Date();
         endOfDay.setHours(16, 59, 59, 999);
-        console.log("today", today);
-        console.log("startOfDay", startOfDay);
-        console.log("endOfDay", endOfDay);
+        // console.log("today", today);
+        // console.log("startOfDay", startOfDay);
+        // console.log("endOfDay", endOfDay);
 
         // 이번 주의 시작과 끝을 계산
         const startOfWeek = new Date(
@@ -337,8 +338,8 @@ const MainScreen = () => {
         const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6)); // 일요일
         endOfWeek.setHours(16, 59, 59, 999);
 
-        console.log("startOfWeek", startOfWeek);
-        console.log("endOfWeek", endOfWeek);
+        // console.log("startOfWeek", startOfWeek);
+        // console.log("endOfWeek", endOfWeek);
 
         // 이번 달의 시작과 끝
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -353,8 +354,8 @@ const MainScreen = () => {
           999
         );
 
-        console.log("startOfMonth", startOfMonth);
-        console.log("endOfMonth", endOfMonth);
+        // console.log("startOfMonth", startOfMonth);
+        // console.log("endOfMonth", endOfMonth);
 
         const fetchDataForPeriod = (startDate, endDate, periodKey) => {
           AppleHealthKit.getSleepSamples(
@@ -446,7 +447,7 @@ const MainScreen = () => {
               rWidth={5}
               rBGWidth={10}
               rTColor={Colors.primary500}
-              rFill={(cal / 1000) * 100}
+              rFill={(cal / 2500) * 100}
             >
               <Text
                 style={{
