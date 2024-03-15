@@ -17,10 +17,12 @@ import { getRecommendedMenu } from "../util/auth";
 import Meal_Item from "../components/ui/Meal_Item";
 import { AuthContext } from "../store/auth-context";
 import FoodNeedsPopup from "../components/ui/FoodNeedsPopup";
+import OptionalPopup from "../components/ui/OptionalPopup";
 
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [foodNeedsUpdated, setFoodNeedsUpdated] = useState(false);
+  const [foodNeedsReq, setFoodNeedsReq] = useState(false);
 
   const [allergiesChecks, setAllergiesChecks] = useState({
     containsEggs: false,
@@ -50,6 +52,10 @@ const LogScreen = () => {
     navigation.navigate("MealsOverview", { title: name, data: data });
   };
 
+  const handleUpdateReqPopup = () => {
+    setFoodNeedsReq(true);
+  };
+
   const breakFastData = mealData?.Breakfast;
   const lunchData = mealData?.Lunch;
   const dinnerData = mealData?.Dinner;
@@ -64,10 +70,7 @@ const LogScreen = () => {
         const jsonStringPref = await AsyncStorage.getItem("pref");
         // console.log("json:", jsonStringPref);
         if (jsonStringAllergy === null && jsonStringPref === null) {
-          Alert.alert(
-            "Food Needs",
-            "Please update your food needs!!!\nAfter pressing the plus button on the top right, you can select your food needs."
-          );
+          handleUpdateReqPopup();
         } else if (jsonStringAllergy !== null && jsonStringPref !== null) {
           const allergies = await JSON.parse(jsonStringAllergy);
           const pref = await JSON.parse(jsonStringPref);
@@ -145,7 +148,7 @@ const LogScreen = () => {
       }));
       // console.log(mealData);
       setModalVisible(!isModalVisible);
-      setIsAlertVisible(true);
+      setFoodNeedsUpdated(true);
 
     } catch (erorr) {
       // console.error('Failed to save the preferences.', e);
@@ -179,10 +182,16 @@ const LogScreen = () => {
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Recommended</Text>
       <FoodNeedsPopup
-        isVisible={isAlertVisible}
-        onClose={() => setIsAlertVisible(false)}
+        isVisible={foodNeedsUpdated}
+        onClose={() => setFoodNeedsUpdated(false)}
         title="Food Needs Updated!"
         message="You can now view the updated recommended meals."
+      />
+      <FoodNeedsPopup
+        isVisible={foodNeedsReq}
+        onClose={() => setFoodNeedsReq(false)}
+        title="Update your food needs!"
+        message="Press the plus sign at the top right and select your food needs."
       />
       <TouchableOpacity onPress={toggleModal} style={styles.plusButton}>
         <Text style={styles.plusButtonText}>+</Text>
