@@ -1,5 +1,10 @@
 import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import React from "react";
+import {
+  useNavigation,
+  useIsFocused,
+  useFocusEffect,
+} from "@react-navigation/native";
 import AppleHealthKit from "react-native-health";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -49,11 +54,33 @@ const MainScreen = () => {
     standToday += m.value;
   });
 
+  const updateUserInfo = async () => {
+    try {
+      const existingData = await AsyncStorage.getItem("userInfo");
+      let userInfo = JSON.parse(existingData) || {};
+      userInfo["timeInBed"] = sleepData["today"]?.[0]?.value.toFixed(1);
+      userInfo["calories"] = burnedToday?.toFixed(1);
+
+      // console.log(userInfo);
+
+      await AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+    } catch (error) {
+      console.log("Failed to save data", error);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      updateUserInfo();
+      return () => {};
+    }, [activeBurned, sleepData])
+  );
+
   useEffect(() => {
     if (isFocused) {
       const date = new Date();
       setCurrentDate(formatDate(date));
-      // fetchDataAndSave(authCtx);
+
       const fetchData = async () => {
         const rawData = await AsyncStorage.getItem("caloriesIntakeData");
         const data = JSON.parse(rawData) || [];
@@ -377,6 +404,7 @@ const MainScreen = () => {
         fetchDataForPeriod(startOfWeek, endOfWeek, "thisWeek");
         fetchDataForPeriod(startOfMonth, endOfMonth, "thisMonth");
       });
+      updateUserInfo();
     }
   }, [isFocused]);
 

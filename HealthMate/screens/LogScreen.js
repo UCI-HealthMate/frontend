@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  Dimensions,
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import { Colors } from "../constants/styles";
@@ -17,8 +18,14 @@ import { getRecommendedMenu } from "../util/auth";
 import Meal_Item from "../components/ui/Meal_Item";
 import { AuthContext } from "../store/auth-context";
 
+import FoodNeedsPopup from "../components/ui/FoodNeedsPopup";
+
+const deviceWidth = Dimensions.get("window").width;
+
 const LogScreen = () => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   const [allergiesChecks, setAllergiesChecks] = useState({
     containsEggs: false,
     containsFish: false,
@@ -142,6 +149,7 @@ const LogScreen = () => {
       }));
       // console.log(mealData);
       setModalVisible(!isModalVisible);
+      setIsAlertVisible(true);
     } catch (erorr) {
       // console.error('Failed to save the preferences.', e);
       Alert.alert("Need to Re-Login!", "Please login again!!", [
@@ -173,6 +181,12 @@ const LogScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Recommended</Text>
+      <FoodNeedsPopup
+        isVisible={isAlertVisible}
+        onClose={() => setIsAlertVisible(false)}
+        title="Food Needs Updated. Syncing Required!"
+        message='Please press "Sync" from Account screen for more tailored recommendations'
+      />
       <TouchableOpacity onPress={toggleModal} style={styles.plusButton}>
         <Text style={styles.plusButtonText}>+</Text>
       </TouchableOpacity>
@@ -265,6 +279,7 @@ const LogScreen = () => {
           >
             Recommended Breakfast #1
           </Meal_Item>
+          <View style={styles.horizontalLine} />
           <Meal_Item
             onPress={() => {
               switchToMealOverview("Breakfast #2", breakFastData?.["2"]);
@@ -272,6 +287,7 @@ const LogScreen = () => {
           >
             Recommended Breakfast #2
           </Meal_Item>
+          <View style={styles.horizontalLine} />
           <Meal_Item
             onPress={() => {
               switchToMealOverview("Breakfast #3", breakFastData?.["3"]);
@@ -289,6 +305,7 @@ const LogScreen = () => {
           >
             Recommended Lunch #1
           </Meal_Item>
+          <View style={styles.horizontalLine} />
           <Meal_Item
             onPress={() => {
               switchToMealOverview("Lunch #2", lunchData?.["2"]);
@@ -296,6 +313,7 @@ const LogScreen = () => {
           >
             Recommended Lunch #2
           </Meal_Item>
+          <View style={styles.horizontalLine} />
           <Meal_Item
             onPress={() => {
               switchToMealOverview("Lunch #3", lunchData?.["3"]);
@@ -313,6 +331,7 @@ const LogScreen = () => {
           >
             Recommended Dinner #1
           </Meal_Item>
+          <View style={styles.horizontalLine} />
           <Meal_Item
             onPress={() => {
               switchToMealOverview("Dinner #2", dinnerData?.["2"]);
@@ -320,6 +339,7 @@ const LogScreen = () => {
           >
             Recommended Dinner #2
           </Meal_Item>
+          <View style={styles.horizontalLine} />
           <Meal_Item
             onPress={() => {
               switchToMealOverview("Dinner #3", dinnerData?.["3"]);
@@ -351,7 +371,7 @@ const styles = StyleSheet.create({
   },
   periodContainer: {
     flex: 1,
-    marginVertical: 20,
+    marginVertical: 10,
     borderRadius: 8,
     width: "100%",
     marginBottom: 8,
@@ -359,7 +379,7 @@ const styles = StyleSheet.create({
   periodTitle: {
     fontSize: 18,
     color: Colors.primary100,
-    marginLeft: 20,
+    marginLeft: 8,
     marginTop: 15,
     fontWeight: "600",
   },
@@ -451,5 +471,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     alignContent: "center",
+  },
+  horizontalLine: {
+    borderBottomColor: "#989898",
+    borderBottomWidth: 1,
+    marginVertical: deviceWidth < 400 ? 6 : 8,
   },
 });

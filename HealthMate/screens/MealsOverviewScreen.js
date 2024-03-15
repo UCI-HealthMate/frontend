@@ -43,7 +43,7 @@ const MealsOverviewScreen = ({ route }) => {
               now.getTime() +
                 (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
             );
-            console.log(currentDate);
+            // console.log(currentDate);
             try {
               const existingData = await AsyncStorage.getItem(
                 "caloriesIntakeData"

@@ -6,8 +6,12 @@ import { AuthContext } from "../store/auth-context";
 import BubbleWithCharacter from "../components/ui/BubbleWithCharacter";
 import Value from "../components/AccountInformation/Value";
 import useHealthData from "../hooks/useHealthData";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import FoodNeedsPopup from "../components/ui/FoodNeedsPopup";
 
 const AccountScreen = () => {
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+
   authCtx = useContext(AuthContext);
   const today2 = new Date();
   const startOfDay = new Date(
@@ -17,20 +21,63 @@ const AccountScreen = () => {
   );
   startOfDay.setHours(-7, 0, 0, 0);
 
+  const calculateAge = (birthDateString) => {
+    const today = new Date();
+    const birthDate = new Date(birthDateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
   const {
     biosex,
     birthday,
-    feet,
-    inches,
+    height,
     weight,
     bodyFatPerc,
     bmi,
     steps,
     numFlights,
-  } = useHealthData(startOfDay); // date is 03/07/24
+  } = useHealthData(startOfDay);
+
+  const feet = Math.floor(height / 12);
+  const inches = height % 12;
+
+  const currentAge = calculateAge(birthday);
+
+  const updateUserInfo = async () => {
+    try {
+      const existingData = await AsyncStorage.getItem("userInfo");
+      let userInfo = JSON.parse(existingData) || {};
+
+      userInfo["sex"] = biosex !== "unknown" ? biosex : "male";
+      userInfo["bodyFat"] = bodyFatPerc !== 0 ? bodyFatPerc.toFixed(1) : 20.0;
+      userInfo["height"] = height !== 0 ? height.toFixed(1) : 65.0;
+      userInfo["weight"] = weight !== 0 ? weight.toFixed(1) : 170.0;
+      userInfo["age"] = currentAge !== 0 ? currentAge : 25.0;
+      userInfo["bmi"] = bmi !== 0 ? bmi.toFixed(1) : 22.0;
+
+      // console.log(userInfo);
+
+      await AsyncStorage.setItem("userInfo", JSON.stringify(userInfo));
+      setIsAlertVisible(true);
+    } catch (error) {
+      console.log("Failed to save calories data", error);
+    }
+  };
 
   return (
     <View style={styles.rootContainer}>
+      <FoodNeedsPopup
+        isVisible={isAlertVisible}
+        onClose={() => setIsAlertVisible(false)}
+        title="Congrats!!"
+        message="You can now view the updated recommended meals."
+      />
       <BubbleWithCharacter>
         <View>
           <Text style={{ fontSize: 20, margin: 5, alignSelf: "center" }}>
@@ -70,7 +117,7 @@ const AccountScreen = () => {
           }}
         >
           <View style={styles.button}>
-            <Button>Sync</Button>
+            <Button onPress={updateUserInfo}>Sync</Button>
           </View>
           <View style={styles.button}>
             <Button bgColor="white" onPress={authCtx.logout}>

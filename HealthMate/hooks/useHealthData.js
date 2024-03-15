@@ -22,9 +22,6 @@ const useHealthData = (date) => {
   const [numFlights, setNumFlights] = useState(0);
   const formattedBday = formatBday(birthday);
 
-  const feet = Math.floor(height / 12);
-  const inches = height % 12;
-
   useEffect(() => {
     const permissions = {
       permissions: {
@@ -122,8 +119,7 @@ const useHealthData = (date) => {
   return {
     biosex,
     birthday: formattedBday,
-    feet,
-    inches, // height
+    height,
     weight,
     bodyFatPerc,
     bmi,
