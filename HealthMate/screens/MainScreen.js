@@ -113,7 +113,7 @@ const MainScreen = () => {
 
       const saveSleepData = async (key, data) => {
         try {
-          const sleepData = data.reduce((acc, m) => {
+          const sleepDataFromHK = data.reduce((acc, m) => {
             if (m.value === "INBED") {
               // console.log(key, m.startDate, m.endDate);
               const startTime = m.startDate;
@@ -122,7 +122,12 @@ const MainScreen = () => {
               const end = new Date(endTime);
               const difference = end - start;
               const minutesSlept = difference / 1000 / 60;
-              const dayOfStart = end.getDate();
+              const dayOfStart = end.getUTCDate();
+              // console.log(start);
+              // console.log(end);
+              // console.log(difference);
+              // console.log(difference);
+              // console.log(dayOfStart);
 
               acc.push({
                 label: dayOfStart,
@@ -135,23 +140,27 @@ const MainScreen = () => {
             return acc;
           }, []);
 
-          const result = sleepData.reduce((acc, { label, min, value }) => {
-            if (!acc[label]) {
-              acc[label] = { label, min: 0, value: 0 };
-            }
-            acc[label].min += min;
-            acc[label].value += value;
-            return acc;
-          }, {});
+          const result = sleepDataFromHK.reduce(
+            (acc, { label, min, value }) => {
+              if (!acc[label]) {
+                acc[label] = { label, min: 0, value: 0 };
+              }
+              acc[label].min += min;
+              acc[label].value += value;
+              return acc;
+            },
+            {}
+          );
 
           // Converting the result object back to an array
           const simplifiedData = Object.values(result);
-          // console.log(simplifiedData);
+          // console.log("SimpleSleepData: ", [key], simplifiedData);
 
           setSleepData((prevSleepData) => ({
             ...prevSleepData,
             [key]: simplifiedData,
           }));
+          // console.log("stateSleepData: ", sleepData);
         } catch (error) {
           console.error("Error saving data", error);
         }
