@@ -77,6 +77,7 @@ const MealsOverviewScreen = ({ route }) => {
           return (
             <View key={key}>
               <Pressable
+                style={({ pressed }) => [pressed && styles.pressed]}
                 onPress={() => {
                   switchToMealOverview(m.name, m);
                 }}
@@ -154,5 +155,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: deviceWidth < 400 ? 20 : 30,
+  },
+  pressed: {
+    opacity: 0.25,
   },
 });
