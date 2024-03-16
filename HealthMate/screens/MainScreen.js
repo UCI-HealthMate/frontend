@@ -57,7 +57,16 @@ const MainScreen = () => {
   const updateUserInfo = async () => {
     try {
       const existingData = await AsyncStorage.getItem("userInfo");
-      let userInfo = JSON.parse(existingData) || {};
+      let userInfo = JSON.parse(existingData) || {
+        age: 21,
+        bmi: 22,
+        bodyFat: 20,
+        calories: "0.0",
+        height: 65,
+        sex: "male",
+        timeInBed: 7,
+        weight: 170,
+      };
       userInfo["timeInBed"] = sleepData["today"]?.[0]?.value.toFixed(1) || 7;
 
       userInfo["calories"] = burnedToday?.toFixed(1);

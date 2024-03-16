@@ -5,9 +5,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const getRecommendedMenu = async (data) => {
   // console.log("On the API:", data);
   const existingData = await AsyncStorage.getItem("userInfo");
-  let userInfo = JSON.parse(existingData) || {};
+  let userInfo = JSON.parse(existingData) || {
+    age: 21,
+    bmi: 22,
+    bodyFat: 20,
+    calories: "0.0",
+    height: 65,
+    sex: "male",
+    timeInBed: 7,
+    weight: 170,
+  };
   const newData = { ...data, ...userInfo };
-  // console.log(newData);
+  console.log(newData);
   const url = "http://34.125.134.116:8000/menu/items/";
   const cookieData = await CookieManager.get("http://34.125.134.116:8000");
   // console.log("cookieData", cookieData);

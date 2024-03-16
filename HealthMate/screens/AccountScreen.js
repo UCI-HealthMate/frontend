@@ -52,7 +52,16 @@ const AccountScreen = () => {
   const updateUserInfo = async () => {
     try {
       const existingData = await AsyncStorage.getItem("userInfo");
-      let userInfo = JSON.parse(existingData) || {};
+      let userInfo = JSON.parse(existingData) || {
+        age: 21,
+        bmi: 22,
+        bodyFat: 20,
+        calories: "0.0",
+        height: 65,
+        sex: "male",
+        timeInBed: 7,
+        weight: 170,
+      };
 
       userInfo["sex"] = biosex !== "unknown" ? biosex : "male";
       userInfo["bodyFat"] = bodyFatPerc !== 0 ? bodyFatPerc.toFixed(1) : 20.0;
@@ -101,7 +110,7 @@ const AccountScreen = () => {
         <Value label="Body Mass Index" value={bmi ? bmi : "..."} />
         <Value
           label="Step Count (today)"
-          value={steps ? steps.toString() : "..."}
+          value={steps.toFixed(0) ? steps.toString() : "..."}
         />
         <Value
           label="Flights Climbed"
