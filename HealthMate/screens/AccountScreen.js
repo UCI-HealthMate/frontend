@@ -110,7 +110,7 @@ const AccountScreen = () => {
         <Value label="Body Mass Index" value={bmi ? bmi : "..."} />
         <Value
           label="Step Count (today)"
-          value={steps.toFixed(0) ? steps.toString() : "..."}
+          value={steps.toFixed(0) ? steps.toFixed(0) : "..."}
         />
         <Value
           label="Flights Climbed"
