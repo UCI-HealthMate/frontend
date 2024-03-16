@@ -17,7 +17,6 @@ const Input = ({
       </Text> */}
       <TextInput
         style={[styles.input, isInvalid && styles.inputInvalid]}
-        autoCapitalize={false}
         autoCapitalize="none"
         keyboardType={keyboardType}
         secureTextEntry={secure}
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary800,
     borderRadius: 8,
 
-    borderColor: "#F8CECC",
+    borderColor: Colors.primary100,
     borderWidth: 2,
 
     fontSize: 16,

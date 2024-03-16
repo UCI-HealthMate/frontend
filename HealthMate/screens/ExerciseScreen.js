@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 const deviceWidth = Dimensions.get("window").width;
 
 const ExerciseScreen = ({ route }) => {
-  console.log(route.params);
+  const { activeBurnedData, standTimeData } = route.params;
+  // console.log(activeBurnedData);
+  // console.log(standTimeData);
   const [time, setTime] = useState(0);
   const [calBurn, setCalBurn] = useState(0);
   const [selectedPeriod, setSelectedPeriod] = useState("Day");
@@ -18,7 +20,10 @@ const ExerciseScreen = ({ route }) => {
   const wText = "Here's your weekly average mins & cal burned!";
   const mText = "Here's your monthly average mins & cal burned!";
 
-  const rDayText1 = "15 mins left until\nYou reach your goal today";
+  const rDayText1 =
+    time > 60
+      ? "You have reach your goal today!"
+      : `${(60 - time).toFixed(0)} mins left until\nYou reach your goal today`;
   const rWeekText1 = "Goal: 60 mins";
   const rMonthText1 = "Goal: 60 mins";
 
@@ -33,33 +38,63 @@ const ExerciseScreen = ({ route }) => {
   const rMonthText2 = "Goal: 600 cals";
 
   useEffect(() => {
-    setTime(45);
+    setTime(0);
     if (selectedPeriod === "Day") {
-      setBarData(route.params["today"]);
+      setBarData(activeBurnedData["today"]);
       let activeburned = 0;
-      route.params["today"].map((m) => {
+      let standTime = 0;
+      activeBurnedData["today"].map((m) => {
         activeburned = activeburned + m.value;
       });
-
+      standTimeData["today"].map((m) => {
+        standTime = standTime + m.value;
+      });
+      setTime((standTime / 60).toFixed(0));
       setCalBurn(activeburned);
     } else if (selectedPeriod === "Week") {
-      setBarData(route.params["thisWeek"]);
+      setBarData(activeBurnedData["thisWeek"]);
       let activeburned = 0;
       let count = 0;
-      route.params["thisWeek"].map((m) => {
+      let standTime = 0;
+      activeBurnedData["thisWeek"].map((m) => {
         count += 1;
         activeburned = activeburned + m.value;
       });
+      if (count === 0) {
+        setCalBurn(0);
+      }
       setCalBurn(activeburned / count);
+      count = 0;
+      standTimeData["thisWeek"].map((m) => {
+        count += 1;
+        standTime = standTime + m.value;
+      });
+      if (count === 0) {
+        setTime(0);
+      }
+      setTime((standTime / count / 60).toFixed(0));
     } else if (selectedPeriod === "Month") {
-      setBarData(route.params["thisMonth"]);
+      setBarData(activeBurnedData["thisMonth"]);
       let activeburned = 0;
       let count = 0;
-      route.params["thisMonth"].map((m) => {
+      let standTime = 0;
+      activeBurnedData["thisMonth"].map((m) => {
         count += 1;
         activeburned = activeburned + m.value;
       });
+      if (count === 0) {
+        setCalBurn(0);
+      }
       setCalBurn(activeburned / count);
+      count = 0;
+      standTimeData["thisMonth"].map((m) => {
+        count += 1;
+        standTime = standTime + m.value;
+      });
+      if (count === 0) {
+        setTime(0);
+      }
+      setTime((standTime / count / 60).toFixed(0));
     }
   }, [selectedPeriod]);
 
@@ -83,7 +118,7 @@ const ExerciseScreen = ({ route }) => {
               rWidth={3}
               rBGWidth={6}
               rTColor={"#B2FAB1"}
-              rFill={40}
+              rFill={time ? (time / 60) * 100 : 0}
             >
               <Text
                 style={{

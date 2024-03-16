@@ -11,6 +11,8 @@ import SignupScreen from "./screens/SignupScreen";
 import DietScreen from "./screens/DietScreen";
 import ExerciseScreen from "./screens/ExerciseScreen";
 import SleepScreen from "./screens/SleepScreen";
+import MealsOverviewScreen from "./screens/MealsOverviewScreen";
+import MealsDetailOverviewScreen from "./screens/MealsDetailOverviewScreen";
 import { Colors } from "./constants/styles";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 
@@ -70,6 +72,24 @@ const AuthenticatedStack = () => {
         component={SleepScreen}
         options={{ headerBackTitleVisible: false, headerTintColor: "#B1DBFA" }}
       />
+      <Stack.Screen
+        name="MealsOverview"
+        component={MealsOverviewScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+          headerBackTitleVisible: false,
+          headerTintColor: Colors.primary500,
+        })}
+      />
+      <Stack.Screen
+        name="MealsDetailOverview"
+        component={MealsDetailOverviewScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+          headerBackTitleVisible: false,
+          headerTintColor: Colors.primary500,
+        })}
+      />
     </Stack.Navigator>
   );
 };
@@ -91,8 +111,9 @@ const Root = () => {
   useEffect(() => {
     const fetchToken = async () => {
       const storedToken = await AsyncStorage.getItem("token");
+      const storedToken2 = await AsyncStorage.getItem("token2");
       if (storedToken) {
-        authCtx.authenticate(storedToken);
+        authCtx.authenticate(storedToken, storedToken2);
       }
       const storedId = await AsyncStorage.getItem("id");
       if (storedId) {

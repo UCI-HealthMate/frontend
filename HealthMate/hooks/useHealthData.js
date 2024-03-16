@@ -22,9 +22,6 @@ const useHealthData = (date) => {
   const [numFlights, setNumFlights] = useState(0);
   const formattedBday = formatBday(birthday);
 
-  const feet = Math.floor(height / 12);
-  const inches = height % 12;
-
   useEffect(() => {
     const permissions = {
       permissions: {
@@ -77,11 +74,10 @@ const useHealthData = (date) => {
     });
     AppleHealthKit.getLatestHeight(options, (err, results) => {
       if (err) {
-        return console.error("Error fetching LatestHeight", err);
+        return;
       }
       // console.log(results);
       setHeight(results.value);
-      return height;
     });
     AppleHealthKit.getLatestWeight(options, (err, results) => {
       if (err) {
@@ -108,14 +104,14 @@ const useHealthData = (date) => {
       if (err) {
         return;
       }
-      // console.log(results)
+      // console.log(results);
       setSteps(results.value);
     });
     AppleHealthKit.getFlightsClimbed(options, (err, results) => {
       if (err) {
         return;
       }
-      // console.log(results)
+      // console.log(results);
       setNumFlights(results.value);
     });
   }, [hasPermissions]);
@@ -123,8 +119,7 @@ const useHealthData = (date) => {
   return {
     biosex,
     birthday: formattedBday,
-    feet,
-    inches, // height
+    height,
     weight,
     bodyFatPerc,
     bmi,

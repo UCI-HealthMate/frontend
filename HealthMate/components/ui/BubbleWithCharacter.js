@@ -9,7 +9,7 @@ const BubbleWithCharacter = ({ children }) => {
       </View>
       <View style={styles.speechBubbleTail} />
       <Image
-        source={require("../../assets/ae.png")}
+        source={require("../../assets/logo1.png")}
         style={styles.characterImage}
       />
     </View>
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   speechBubble: {
     width: deviceWidth < 400 ? 245 : 282,
-    height: 113,
+    height: 110,
     backgroundColor: Colors.primary500,
     borderRadius: 15,
     justifyContent: "center",
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     height: 0,
     backgroundColor: "transparent",
     borderStyle: "solid",
-    borderLeftWidth: 20,
+    borderLeftWidth: 21,
     borderRightWidth: 20,
     borderBottomWidth: 30,
     borderLeftColor: "transparent",
@@ -52,10 +52,10 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   characterImage: {
-    height: 167, // 캐릭터 이미지 높이 조정
-    width: 154,
+    height: 150, // 캐릭터 이미지 높이 조정
+    width: 135,
     alignSelf: "flex-end",
-    marginTop: -40,
-    marginRight: -23,
+    marginTop: -30,
+    marginRight: -15,
   },
 });

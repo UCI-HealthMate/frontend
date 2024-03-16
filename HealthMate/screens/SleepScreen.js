@@ -28,10 +28,11 @@ const SleepScreen = ({ route }) => {
 
   useEffect(() => {
     if (selectedPeriod === "Day") {
-      const todayData =
-        route.params["today"][0] == undefined
-          ? [{ label: 0, value: 0 }]
-          : route.params["today"];
+      const todayData = route.params["today"] || [{ label: 0, value: 0 }];
+      // const todayData =
+      //   route.params["today"][0] == undefined
+      //     ? [{ label: 0, value: 0 }]
+      //     : route.params["today"];
       setBarData(todayData);
       if (todayData.length > 0) {
         let hour = 0;
@@ -43,11 +44,11 @@ const SleepScreen = ({ route }) => {
         setSleepHours(hour);
       }
     } else if (selectedPeriod === "Week") {
-      // const thisWeekData = route.params["thisWeek"] || [{label:0,value:0}];
-      const thisWeekData =
-        route.params["thisWeek"][0] == undefined
-          ? [{ label: 0, value: 0 }]
-          : route.params["thisWeek"];
+      const thisWeekData = route.params["thisWeek"] || [{ label: 0, value: 0 }];
+      // const thisWeekData =
+      //   route.params["thisWeek"][0] == undefined
+      //     ? [{ label: 0, value: 0 }]
+      //     : route.params["thisWeek"];
       setBarData(thisWeekData);
       if (thisWeekData.length > 0) {
         let hour = 0;
@@ -61,11 +62,13 @@ const SleepScreen = ({ route }) => {
         setSleepHours(hour / count);
       }
     } else if (selectedPeriod === "Month") {
-      // const thisMonthData = route.params["thisMonth"] || [{label:0,value:0}];
-      const thisMonthData =
-        route.params["thisMonth"][0] == undefined
-          ? [{ label: 0, value: 0 }]
-          : route.params["thisMonth"];
+      const thisMonthData = route.params["thisMonth"] || [
+        { label: 0, value: 0 },
+      ];
+      // const thisMonthData =
+      //   route.params["thisMonth"][0] == undefined
+      //     ? [{ label: 0, value: 0 }]
+      //     : route.params["thisMonth"];
       setBarData(thisMonthData);
       if (thisMonthData.length > 0) {
         let hour = 0;
