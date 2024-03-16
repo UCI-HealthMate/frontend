@@ -21,6 +21,14 @@ const BarChart = ({ barData, bColor, period, category }) => {
     } else if (period === "Month") {
       barWidth = barWidth - (deviceWidth < 400 ? 10 : 15);
     }
+  } else if (category === "diet") {
+    if (period === "Day") {
+      barWidth = barWidth + (deviceWidth < 400 ? 9 : 14);
+    } else if (period === "Week") {
+      barWidth = barWidth + (deviceWidth < 400 ? 5 : 7);
+    } else if (period === "Month") {
+      barWidth = barWidth - (deviceWidth < 400 ? 10 : 15);
+    }
   }
 
   return (

@@ -159,7 +159,12 @@ const DietScreen = () => {
         </Text>
       </View>
       <View style={styles.graphPlaceholder}>
-        <BarChart barData={barData} bColor={Colors.primary500} />
+        <BarChart
+          barData={barData}
+          bColor={Colors.primary500}
+          period={selectedPeriod}
+          category="diet"
+        />
       </View>
     </View>
   );
