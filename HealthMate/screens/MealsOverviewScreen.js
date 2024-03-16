@@ -30,7 +30,7 @@ const MealsOverviewScreen = ({ route }) => {
     const currentDate = new Date(
       now.getTime() + (offsetInHours * 60 + now.getTimezoneOffset()) * 60000
     );
-    console.log(currentDate);
+    // console.log(currentDate);
     try {
       const existingData = await AsyncStorage.getItem("caloriesIntakeData");
       let newData = JSON.parse(existingData) || [
@@ -50,7 +50,7 @@ const MealsOverviewScreen = ({ route }) => {
         { date: "2024-03-14T15:14:47.291Z", value: 2140 },
         { date: "2024-03-15T00:43:55.561Z", value: 340 },
       ];
-      console.log(newData);
+      // console.log(newData);
       newData.push({ date: currentDate, value: totalCalories });
       await AsyncStorage.setItem("caloriesIntakeData", JSON.stringify(newData));
       // console.log("Calories data saved successfully");
