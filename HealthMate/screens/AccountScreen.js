@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Colors } from "../constants/styles";
 import Button from "../components/ui/Button";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../store/auth-context";
@@ -84,7 +83,7 @@ const AccountScreen = () => {
       <FoodNeedsPopup
         isVisible={isAlertVisible}
         onClose={() => setIsAlertVisible(false)}
-        title="Congrats!!"
+        title="Congrats!"
         message="You can now view the updated recommended meals."
       />
       <BubbleWithCharacter>
@@ -113,7 +112,7 @@ const AccountScreen = () => {
           value={steps.toFixed(0) ? steps.toFixed(0) : "..."}
         />
         <Value
-          label="Flights Climbed"
+          label="Flights Climbed (today)"
           value={numFlights ? numFlights.toString() : "..."}
         />
       </View>
