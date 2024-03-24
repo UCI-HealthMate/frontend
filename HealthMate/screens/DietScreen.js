@@ -21,7 +21,7 @@ const DietScreen = () => {
   const rDayText1 =
     cal >= 2500
       ? "You have reach your goal today!"
-      : `${(2500 - cal).toFixed(1)} cal left until you reach your goal today`;
+      : `${(2500 - cal).toFixed(0)} cal left until you reach your goal today`;
   const rWeekText1 = "Goal: 2500 cal";
   const rMonthText1 = "Goal: 2500 cal";
 

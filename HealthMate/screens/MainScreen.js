@@ -549,7 +549,6 @@ const MainScreen = () => {
                 {sleepData["today"]?.[0]?.value
                   ? `${sleepData["today"][0].value.toFixed(1)}`
                   : 0}{" "}
-                hours
               </Text>
             </RingChart>
           </Pressable>
